@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>目標管理 v2.2｜過去入力＋日曜自動エクスポート</title>
+<title>目標管理 v2.3｜日曜はじまり＆カレンダー修正</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
   :root{
@@ -36,9 +36,14 @@
   .sec-title{margin:0 0 10px;font-size:14px;color:#cfe0ff}
   .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
   .wd{font-size:12px;color:#9fb3c8;text-align:center}
-  .day{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
-       border-radius:10px;border:1px solid var(--border);font-size:14px;color:#cfe0ff;
-       background:#0b0f14;cursor:pointer;user-select:none}
+  .day{
+    /* 高さつぶれ防止: aspect-ratio + fallback */
+    aspect-ratio:1/1; height:42px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:10px; border:1px solid var(--border); font-size:14px; color:#cfe0ff;
+    background:#0b0f14; cursor:pointer; user-select:none
+  }
+  @supports (aspect-ratio: 1 / 1) { .day{ height:auto; } }
   .day.off{opacity:.35;cursor:pointer}
   .day.done{background:#0f2b1d;border-color:#205339;color:#d2ffe8;box-shadow:inset 0 0 0 2px #205339}
   .day.selected{outline:2px solid #79a7ff}
@@ -78,7 +83,7 @@
   <!-- 左 -->
   <section>
     <div class="card hint">
-      ①<strong>目標を追加</strong> → ②<strong>記録したい日をタップ</strong>（選択枠） → ③<strong>その日の値/メモ/実施</strong>を保存。右上の日付ピッカーで過去日指定もOK。
+      ①<strong>目標を追加</strong> → ②<strong>日付をタップ</strong>（選択枠） → ③<strong>その日の値/メモ/実施</strong>を保存。右上の日付ピッカーで過去日指定もOK。
     </div>
 
     <div class="card">
@@ -130,7 +135,6 @@
         <div class="cell"><span class="muted small">連続ストリーク</span><b id="kpiStreak">-</b></div>
       </div>
 
-      <!-- 曜日ヘッダー -->
       <div class="calendar" id="wdRow"></div>
       <div id="calendar" class="calendar" style="margin-top:6px"></div>
 
@@ -170,7 +174,11 @@
 </main>
 
 <script>
-const STORAGE_KEY='goals.v2.2';
+/* ========= 基本設定 ========= */
+// 週の開始: 日曜=0（←ご要望どおり）
+const WEEK_START = 0;
+
+const STORAGE_KEY='goals.v2.3';
 let state=load()||{
   goals:[seed('毎朝6:00起床','習慣','平日6:00起床で30分の静かな時間を確保。','',''),
          seed('体重管理','健康','体重と食事の関係を毎日観察。','kg',65),
@@ -181,22 +189,23 @@ let state=load()||{
 if(!state.activeGoalId&&state.goals.length)state.activeGoalId=state.goals[0].id;
 save();
 
-let selectedKey=today(); // 過去入力の選択日
+let selectedKey=today(); // 選択中の日
 
+/* ========= util ========= */
 function seed(t,c,s,u,tar){return{id:crypto.randomUUID(),title:t,category:c,statement:s,unit:u,target:tar===''?'':Number(tar),createdAt:today(),days:{}}}
 function load(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))}catch(e){return null}}
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
+const $=s=>document.querySelector(s);
 function today(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 function ymStr(d){return d.toISOString().slice(0,7)}
 function fmt(n){return n===''||n==null||isNaN(n)?'-':(''+Number(n)).replace(/(\.\d{0,2}).*$/,'$1')}
 
-/* ===== 日曜自動エクスポート（開いたら自動・1日1回） ===== */
+/* ========= 日曜自動エクスポート（開いたら） ========= */
 (function sundayAutoExport(){
   const now = new Date();
-  const isSunday = now.getDay() === 0;           // ローカル時間で日曜
+  const isSunday = now.getDay() === 0;
   const lastKey = 'last.auto.export.date';
-  const todayLocal = today();                    // ローカル日付（YYYY-MM-DD）
+  const todayLocal = today();
   const last = localStorage.getItem(lastKey);
   if(isSunday && last !== todayLocal){
     const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
@@ -206,16 +215,20 @@ function fmt(n){return n===''||n==null||isNaN(n)?'-':(''+Number(n)).replace(/(\.
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
     localStorage.setItem(lastKey, todayLocal);
-    alert('日曜日なので自動でエクスポートしました。ファイルに保存してください。');
+    setTimeout(()=>alert('日曜日なので自動でエクスポートしました。保存してください。'), 0);
   }
 })();
 
-/* 目標リスト */
+/* ========= 目標リスト ========= */
 const goalList=$('#goalList');
 const editor={id:null,title:$('#gTitle'),cat:$('#gCategory'),st:$('#gStatement'),unit:$('#gUnit'),target:$('#gTarget')};
+
 function renderGoals(){
   goalList.innerHTML='';
-  if(!state.goals.length){goalList.innerHTML='<p class="muted small">目標がありません。「＋ 目標を追加」から作成してください。</p>';return}
+  if(!state.goals.length){
+    goalList.innerHTML='<p class="muted small">目標がありません。「＋ 目標を追加」から作成してください。</p>';
+    return;
+  }
   state.goals.forEach(g=>{
     const el=document.createElement('div'); el.className='goal-item';
     el.innerHTML=`
@@ -229,7 +242,7 @@ function renderGoals(){
     el.querySelector('input').onchange=()=>{state.activeGoalId=g.id;save();refreshRight()}
     el.querySelector('.editBtn').onclick=()=>editGoal(g.id);
     goalList.appendChild(el);
-  })
+  });
 }
 function editGoal(id){
   const g=state.goals.find(x=>x.id===id)||seed('','','','','');
@@ -240,7 +253,7 @@ function editGoal(id){
 }
 function resetEditor(){editor.id=null;$('#editorTitle').textContent='新しい目標';editor.title.value='';editor.cat.value='習慣';editor.st.value='';editor.unit.value='';editor.target.value='';$('#deleteGoalBtn').style.display='none'}
 $('#addGoalBtn').onclick=()=>{resetEditor();scrollTo({top:0,behavior:'smooth'})}
-$('#resetEditorBtn').onclick=resetEditor;
+$('#resetEditorBtn')?.addEventListener('click', resetEditor);
 $('#saveGoalBtn').onclick=()=>{
   const t=editor.title.value.trim(); if(!t){alert('目標名を入力してください');return}
   const p={title:t,category:editor.cat.value,statement:editor.st.value.trim(),unit:editor.unit.value.trim(),target:editor.target.value===''?'':Number(editor.target.value)}
@@ -248,41 +261,69 @@ $('#saveGoalBtn').onclick=()=>{
   else{const g=seed(p.title,p.category,p.statement,p.unit,p.target);state.goals.unshift(g);state.activeGoalId=g.id}
   save();renderGoals();refreshRight();resetEditor();
 }
-$('#deleteGoalBtn').onclick=()=>{
-  if(!editor.id)return; if(!confirm('この目標を削除しますか？'))return;
-  state.goals=state.goals.filter(x=>x.id!==editor.id);
-  if(!state.goals.length)state.activeGoalId=null; else if(!state.goals.find(x=>x.id===state.activeGoalId))state.activeGoalId=state.goals[0].id;
-  save();renderGoals();refreshRight();resetEditor();
+
+/* ========= 月移動 ========= */
+$('#prevMonthBtn').onclick=()=>shift(-1);
+$('#nextMonthBtn').onclick=()=>shift(+1);
+$('#todayBtn').onclick=()=>{state.monthCursor=today().slice(0,7); selectedKey=today(); save(); refreshRight()}
+function shift(delta){
+  const [y,m]=state.monthCursor.split('-').map(Number);
+  const d=new Date(y, m-1+delta, 1);
+  state.monthCursor=ymStr(d); save(); refreshRight();
 }
 
-/* 月移動 */
-$('#prevMonthBtn').onclick=()=>shift(-1); $('#nextMonthBtn').onclick=()=>shift(+1);
-$('#todayBtn').onclick=()=>{state.monthCursor=today().slice(0,7); selectedKey=today(); save(); refreshRight()}
-function shift(delta){const [y,m]=state.monthCursor.split('-').map(Number);const d=new Date(y,m-1+delta,1);state.monthCursor=ymStr(d);save();refreshRight()}
+/* ========= カレンダー描画 ========= */
+const cal = $('#calendar');
+const monthLabel = $('#monthLabel');
+const wdRow = $('#wdRow');
 
-/* 右画面 */
-const cal=$('#calendar'); const monthLabel=$('#monthLabel'); const wdRow=$('#wdRow');
-['月','火','水','木','金','土','日'].forEach(w=>{const s=document.createElement('div');s.className='wd';s.textContent=w;wdRow.appendChild(s)})
+function buildWeekHeader(){
+  wdRow.innerHTML='';
+  const names = ['日','月','火','水','木','金','土'];
+  for(let i=0;i<7;i++){
+    const idx=(WEEK_START+i)%7;
+    const s=document.createElement('div');
+    s.className='wd'; s.textContent=names[idx];
+    wdRow.appendChild(s);
+  }
+}
+buildWeekHeader();
 
-function refreshRight(){
-  const g=state.goals.find(x=>x.id===state.activeGoalId);
-  if(!g){cal.innerHTML='<p class="muted small">目標を選択してください。</p>';$('#activeGoalBox').innerHTML='';return}
-
-  $('#activeGoalBox').innerHTML=`<div><b>${g.title}</b> <span class="chip">${g.category}</span></div>
-  <div class="muted small">${g.statement?g.statement.replace(/\n/g,' '):'（ステートメント未入力）'}</div>
-  <div class="small">目標値: <b>${fmt(g.target)}</b> ${g.unit||''}</div>`;
-
-  const [yy,mm]=state.monthCursor.split('-').map(Number);
-  const first=new Date(yy,mm-1,1);
-  const start=new Date(first); start.setDate(start.getDate()-((first.getDay()+6)%7)); // 月曜始まり
+function monthGrid(year, month){ // month: 1-12
+  const first = new Date(year, month-1, 1);
+  const offset = (first.getDay() - WEEK_START + 7) % 7;
+  const start = new Date(first);
+  start.setDate(start.getDate() - offset);
   const cells=[];
   for(let i=0;i<42;i++){
     const d=new Date(start); d.setDate(start.getDate()+i);
-    const k=today(d); const rec=g.days[k]||{};
-    cells.push({date:d,key:k,own:d.getMonth()===first.getMonth(),done:!!rec.done});
+    cells.push({ date:d, key: today(d), own: d.getMonth()===first.getMonth() });
   }
-  monthLabel.textContent=`${yy}年 ${mm}月`;
+  return cells;
+}
+
+function refreshRight(){
+  const g = state.goals.find(x=>x.id===state.activeGoalId);
+  if(!g){
+    cal.innerHTML='<p class="muted small">目標を選択してください。</p>';
+    $('#activeGoalBox').innerHTML='';
+    return;
+  }
+
+  $('#activeGoalBox').innerHTML=
+    `<div><b>${g.title}</b> <span class="chip">${g.category}</span></div>
+     <div class="muted small">${g.statement?g.statement.replace(/\n/g,' '):'（ステートメント未入力）'}</div>
+     <div class="small">目標値: <b>${fmt(g.target)}</b> ${g.unit||''}</div>`;
+
+  const [yy,mm] = state.monthCursor.split('-').map(Number);
+  const cells = monthGrid(yy,mm).map(c=>{
+    const rec = g.days[c.key]||{};
+    return {...c, done: !!rec.done};
+  });
+
+  monthLabel.textContent = `${yy}年 ${mm}月`;
   cal.innerHTML='';
+
   cells.forEach(c=>{
     const el=document.createElement('div');
     el.className='day'+(c.own?'':' off')+(c.done?' done':'')+(c.key===selectedKey?' selected':'');
@@ -313,7 +354,7 @@ function setSelectedDate(key){
   save(); refreshRight();
 }
 
-// 日付ピッカー変更
+/* 日付ピッカー */
 $('#datePicker').addEventListener('change', (e)=>{
   const val=e.target.value; if(!val) return;
   const ym=val.slice(0,7);
@@ -321,7 +362,7 @@ $('#datePicker').addEventListener('change', (e)=>{
   setSelectedDate(val);
 });
 
-// 入力欄⇄データ
+/* 入力欄⇄データ */
 function fillFieldsFrom(g, key){
   const rec=g.days[key]||{};
   $('#doneCheck').checked=!!rec.done;
@@ -342,16 +383,21 @@ $('#saveValueBtn').onclick=()=>{
   g.days[selectedKey]=r; save(); refreshRight();
 };
 
+/* 連続ストリーク */
 function streak(g){
-  let s=0; for(let i=0;i<9999;i++){const d=new Date();d.setDate(d.getDate()-i);
-    const k=today(d); const r=g.days[k]; if(r&&r.done){s++}else break} return s+' 日'
+  let s=0; for(let i=0;i<9999;i++){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const k=today(d); const r=g.days[k];
+    if(r&&r.done){s++}else break;
+  } return s+' 日';
 }
 
 /* グラフ */
 let chart;
 function drawChart(g){
   const entries=Object.entries(g.days).filter(([k,v])=>v.value!==undefined).sort((a,b)=>a[0].localeCompare(b[0]));
-  const empty=$('#emptyChart'); const canvas=document.getElementById('chart');
+  const empty=document.getElementById('emptyChart');
+  const canvas=document.getElementById('chart');
   if(!entries.length){ empty.style.display='block'; canvas.style.display='none'; if(chart){chart.destroy()} return }
   empty.style.display='none'; canvas.style.display='block';
   const labels=entries.map(([k])=>k.slice(5));
@@ -377,8 +423,10 @@ document.getElementById('importFile').addEventListener('change',e=>{
   r.readAsText(f);
 });
 
-/* 初期描画 */
-renderGoals(); refreshRight(); editGoal(state.activeGoalId);
+/* 初期描画（順序が大事：ゴール→右側） */
+renderGoals();
+refreshRight();
+editGoal(state.activeGoalId);
 </script>
 </body>
 </html>
