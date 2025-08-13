@@ -1,419 +1,772 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>現在地ダッシュボード｜人生逆算MVP</title>
-<meta name="theme-color" content="#0f1216" />
-<style>
-  :root{
-    --bg:#0f1216; --card:#171b21; --muted:#8ea0b5; --text:#e7edf5; --acc:#60a5fa; --ok:#16a34a; --warn:#f59e0b; --bad:#ef4444;
-    --ring:#223249; --chip:#202734;
-  }
-  html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Apple Color Emoji','Segoe UI Emoji',sans-serif;}
-  .wrap{max-width:720px;margin:0 auto;padding:16px}
-  header{position:sticky;top:0;background:linear-gradient(180deg,rgba(15,18,22,.95),rgba(15,18,22,.85));backdrop-filter:saturate(180%) blur(8px);z-index:10;border-bottom:1px solid #20242c}
-  header .wrap{display:flex;gap:8px;align-items:center;padding:12px 16px}
-  h1{font-size:18px;margin:0;letter-spacing:.02em}
-  .btn{appearance:none;border:1px solid var(--ring);background:var(--chip);color:var(--text);padding:10px 12px;border-radius:10px;font-size:14px}
-  .btn.primary{border-color:#2b5ab7;background:#1f2b47}
-  .btn.ghost{background:transparent}
-  .row{display:flex;gap:8px}
-  .grid{display:grid;gap:12px}
-  .card{background:var(--card);border:1px solid var(--ring);border-radius:16px;padding:14px}
-  label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
-  input,select,textarea{width:100%;box-sizing:border-box;background:#0e131a;border:1px solid #273142;color:var(--text);padding:12px;border-radius:12px;font-size:16px}
-  textarea{min-height:84px;resize:vertical}
-  .kpi{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#0e131a;border:1px solid #273142;border-radius:12px;padding:10px 12px}
-  .kpi b{font-size:18px}
-  .pill{font-size:12px;padding:6px 8px;border-radius:999px;background:#111827;border:1px solid #223249;color:#cbd5e1}
-  .flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .right{margin-left:auto}
-  .danger{color:#fecaca;border-color:#7f1d1d}
-  .ok{color:#bbf7d0;border-color:#14532d}
-  .warn{color:#fde68a;border-color:#7c2d12}
-  .muted{color:var(--muted)}
-  .small{font-size:12px}
-  .section-title{margin:4px 0 8px 0;font-size:14px;color:#b9c7d9}
-  .list{display:grid;gap:8px}
-  .item{display:grid;gap:8px;padding:12px;border:1px solid #223249;border-radius:12px;background:#0e131a}
-  .split{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  @media (min-width:560px){ .split{grid-template-columns:1fr 1fr 1fr} }
-  .progress{height:10px;background:#121826;border:1px solid #223249;border-radius:999px;overflow:hidden}
-  .bar{height:100%;background:linear-gradient(90deg,#60a5fa,#22d3ee)}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap}
-  .footer{padding:40px 0 80px;color:#71839b;text-align:center}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GoalMaster - 究極の目標達成アプリ</title>
+  <meta name="theme-color" content="#667eea" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --grad: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      --bg:#f3f5f9; --ink:#2c3e50; --muted:#6c757d;
+      --card:#fff; --ring:#a8b4ff;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+      background: var(--grad);
+      min-height:100vh;color:#333;overflow-x:hidden;
+    }
+    .app-container{
+      max-width:480px;margin:0 auto;background:var(--card);min-height:100vh;
+      box-shadow:0 0 40px rgba(0,0,0,.1);position:relative;animation:slideIn .5s ease;
+    }
+    @keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .header{background:var(--grad);color:#fff;padding:16px 20px;position:sticky;top:0;z-index:100;
+      box-shadow:0 2px 10px rgba(0,0,0,.1);display:flex;align-items:center;gap:8px;justify-content:space-between}
+    .header h1{font-size:22px;font-weight:800;letter-spacing:.3px}
+    .header .subtitle{font-size:12px;opacity:.9}
+    .top-actions{display:flex;gap:8px}
+    .ghost-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;
+      padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer}
+    .ghost-btn:focus{outline:3px solid rgba(255,255,255,.35)}
+    .nav-tabs{display:flex;background:#f8f9fa;border-bottom:1px solid #dee2e6;position:sticky;top:64px;z-index:90}
+    .nav-tab{flex:1;padding:14px;text-align:center;cursor:pointer;background:none;border:none;font-size:14px;color:#6c757d;transition:.2s;position:relative}
+    .nav-tab.active{color:#667eea;font-weight:700}
+    .nav-tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--grad)}
+    .content{padding:18px}
+    .section{display:none}.section.active{display:block}
+    .card{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 2px 15px rgba(0,0,0,.08)}
+    .card-title{font-size:16px;font-weight:800;margin-bottom:12px;color:var(--ink);display:flex;justify-content:space-between;align-items:center}
+    .input-group{margin-bottom:12px}
+    .input-group label{display:block;margin-bottom:5px;font-size:13px;color:#6c757d;font-weight:600}
+    .input-group input,.input-group textarea,.input-group select{
+      width:100%;padding:12px;border:2px solid #e9ecef;border-radius:8px;font-size:14px;transition:.2s;background:#fff
+    }
+    .input-group input:focus,.input-group textarea:focus,.input-group select:focus{
+      outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.12)}
+    .btn{background:var(--grad);color:#fff;border:none;padding:12px 16px;border-radius:10px;font-size:15px;
+      font-weight:800;cursor:pointer;transition:.2s;width:100%}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(102,126,234,.35)}
+    .btn-secondary{background:#6c757d}
+    .btn-small{padding:8px 12px;font-size:13px;width:auto}
+    .progress-container{margin-bottom:12px}
+    .progress-bar{width:100%;height:28px;background:#e9ecef;border-radius:16px;overflow:hidden;position:relative}
+    .progress-fill{height:100%;background:var(--grad);border-radius:16px;transition:width .3s ease;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px}
+    .goal-item{background:#f8f9fa;border-left:4px solid #667eea;padding:12px;margin-bottom:12px;border-radius:10px}
+    .goal-title{font-weight:800;margin-bottom:4px;color:var(--ink)}
+    .goal-deadline{font-size:12px;color:#6c757d}
+    .chart-container{position:relative;height:300px;margin:12px 0}
+    canvas{max-width:100%;height:auto}
+    .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px}
+    .stat-card{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);padding:16px;border-radius:12px;text-align:center;color:#fff}
+    .stat-value{font-size:24px;font-weight:900;margin-bottom:4px}
+    .stat-label{font-size:12px;opacity:.9}
+    .empty-state{text-align:center;padding:28px;color:#6c757d}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000}
+    .modal.active{display:flex;align-items:center;justify-content:center}
+    .modal-content{background:#fff;padding:22px;border-radius:16px;max-width:420px;width:90%}
+    .floating-btn{position:fixed;bottom:22px;right:22px;width:56px;height:56px;background:var(--grad);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:99}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+    .linklike{background:#eef2ff;border:1px solid #c7d2fe;color:#4338ca;padding:8px 10px;border-radius:8px;font-size:12px;cursor:pointer}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media (max-width:480px){.app-container{max-width:100%}.floating-btn{right:16px;bottom:16px}}
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <h1>現在地ダッシュボード</h1>
-    <button id="exportBtn" class="btn pill right">エクスポート</button>
-    <label for="importFile" class="btn pill">インポート</label>
-    <input id="importFile" type="file" accept="application/json" style="display:none" />
+  <div class="app-container">
+    <div class="header">
+      <div>
+        <h1>🎯 GoalMaster</h1>
+        <div class="subtitle">あなたの目標を現実に</div>
+      </div>
+      <div class="top-actions">
+        <button id="installBtn" class="ghost-btn" style="display:none">⬇ インストール</button>
+        <button id="exportBtn" class="ghost-btn">⤴ エクスポート</button>
+        <label class="ghost-btn" for="importFile" tabindex="0">⤵ インポート</label>
+        <input id="importFile" type="file" accept="application/json" class="sr-only" />
+      </div>
+    </div>
+
+    <div class="nav-tabs" role="tablist">
+      <button class="nav-tab active" onclick="switchTab(this,'dashboard')" role="tab" aria-selected="true">📊 ダッシュボード</button>
+      <button class="nav-tab" onclick="switchTab(this,'inventory')" role="tab" aria-selected="false">📝 現在地</button>
+      <button class="nav-tab" onclick="switchTab(this,'goals')" role="tab" aria-selected="false">🎯 目標</button>
+      <button class="nav-tab" onclick="switchTab(this,'progress')" role="tab" aria-selected="false">📈 進捗</button>
+    </div>
+
+    <div class="content">
+      <!-- Dashboard -->
+      <section id="dashboard" class="section active" aria-labelledby="tab-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="totalGoals">0</div>
+            <div class="stat-label">総目標数</div>
+          </div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)">
+            <div class="stat-value" id="completionRate">0%</div>
+            <div class="stat-label">達成率</div>
+          </div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)">
+            <div class="stat-value" id="activeGoals">0</div>
+            <div class="stat-label">進行中</div>
+          </div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#fa709a 0%,#fee140 100%)">
+            <div class="stat-value" id="streak">0日</div>
+            <div class="stat-label">連続記録</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🔥 今日のフォーカス</div>
+          <div id="todaysFocus">
+            <div class="empty-state"><p>今日の目標を設定しましょう！</p></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🏆 最近の成果</div>
+          <div id="achievements" class="toolbar" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- Inventory -->
+      <section id="inventory" class="section">
+        <div class="card">
+          <div class="card-title">📍 現在の状況分析</div>
+          <div class="input-group">
+            <label for="strengths">強み・リソース</label>
+            <textarea id="strengths" rows="3" placeholder="例：時間管理能力、プログラミングスキル、サポートしてくれる家族..."></textarea>
+          </div>
+          <div class="input-group">
+            <label for="weaknesses">改善点・課題</label>
+            <textarea id="weaknesses" rows="3" placeholder="例：先延ばし癖、運動不足、整理整頓..."></textarea>
+          </div>
+          <div class="input-group">
+            <label for="opportunities">機会・チャンス</label>
+            <textarea id="opportunities" rows="3" placeholder="例：新しいプロジェクト、学習の機会、ネットワーキング..."></textarea>
+          </div>
+          <div class="input-group">
+            <label for="threats">脅威・障害</label>
+            <textarea id="threats" rows="3" placeholder="例：時間不足、予算制限、競争..."></textarea>
+          </div>
+          <button class="btn" onclick="saveInventory()">分析を保存</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">💡 価値観の明確化</div>
+          <div class="input-group">
+            <label>人生で最も大切にしたいこと（上位3つ）</label>
+            <input type="text" id="value1" placeholder="1. 例：家族との時間">
+            <input type="text" id="value2" placeholder="2. 例：自己成長" style="margin-top:10px">
+            <input type="text" id="value3" placeholder="3. 例：社会貢献" style="margin-top:10px">
+          </div>
+          <button class="btn" onclick="saveValues()">価値観を保存</button>
+        </div>
+      </section>
+
+      <!-- Goals -->
+      <section id="goals" class="section">
+        <div class="card">
+          <div class="card-title">
+            <span>🎯 新しい目標を設定</span>
+            <div class="toolbar">
+              <select id="sortGoals" class="linklike" onchange="updateGoalsList()" title="並び替え">
+                <option value="deadline">締切が近い順</option>
+                <option value="progress">進捗が少ない順</option>
+                <option value="created">作成が新しい順</option>
+              </select>
+              <select id="filterCategory" class="linklike" onchange="updateGoalsList()" title="カテゴリ">
+                <option value="all">すべて</option>
+                <option value="health">健康</option>
+                <option value="career">仕事</option>
+                <option value="education">学習</option>
+                <option value="finance">財務</option>
+                <option value="relationship">人間関係</option>
+                <option value="personal">自己成長</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="goalName">目標名</label>
+            <input type="text" id="goalName" placeholder="例：毎日1時間運動する" />
+          </div>
+          <div class="input-group">
+            <label for="goalCategory">カテゴリー</label>
+            <select id="goalCategory">
+              <option value="health">🏃 健康・フィットネス</option>
+              <option value="career">💼 キャリア・仕事</option>
+              <option value="education">📚 学習・スキル</option>
+              <option value="finance">💰 財務・貯蓄</option>
+              <option value="relationship">❤️ 人間関係</option>
+              <option value="personal">🌟 自己成長</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="goalDeadline">期限</label>
+            <input type="date" id="goalDeadline" />
+          </div>
+          <div class="input-group">
+            <label for="goalMetric">測定可能な指標</label>
+            <input type="text" id="goalMetric" placeholder="例：体重を5kg減らす、売上を20%増やす" />
+          </div>
+          <div class="input-group">
+            <label for="goalWhy">なぜこの目標が重要か</label>
+            <textarea id="goalWhy" rows="2" placeholder="理由を明確にしましょう"></textarea>
+          </div>
+          <button class="btn" onclick="addGoal()">目標を追加</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📋 目標リスト</div>
+          <div id="goalsList"><div class="empty-state"><p>まだ目標が設定されていません</p></div></div>
+        </div>
+      </section>
+
+      <!-- Progress -->
+      <section id="progress" class="section">
+        <div class="card">
+          <div class="card-title">📈 全体進捗</div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" id="overallProgress" style="width:0%">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📊 進捗グラフ（直近7日）</div>
+          <div class="chart-container">
+            <canvas id="progressChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">✅ 今日のタスク</div>
+          <div id="dailyTasks">
+            <div class="input-group">
+              <input type="text" id="newTask" placeholder="新しいタスクを追加（Enterで追加）" />
+              <button class="btn" style="margin-top:10px" onclick="addTask()">タスクを追加</button>
+            </div>
+            <div id="taskList" style="margin-top:12px"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">💪 習慣トラッカー（30日）</div>
+          <div id="habitTracker">
+            <div class="habit-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <button class="floating-btn" onclick="showQuickAdd()" aria-label="クイック追加">+</button>
   </div>
-</header>
 
-<main class="wrap grid" id="app">
-
-  <!-- カテゴリ選択 / 追加 -->
-  <section class="card grid">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div class="flex">
-        <span class="pill">カテゴリ</span>
-        <select id="categorySelect"></select>
+  <!-- Modal for quick add -->
+  <div id="quickAddModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="qaTitle">
+    <div class="modal-content">
+      <h3 id="qaTitle" style="margin-bottom:12px">⚡ クイック追加</h3>
+      <div class="input-group">
+        <label for="quickAddType">何を追加しますか？</label>
+        <select id="quickAddType">
+          <option value="goal">🎯 新しい目標</option>
+          <option value="task">✅ タスク</option>
+          <option value="note">📝 メモ</option>
+        </select>
       </div>
-      <button id="addCategoryBtn" class="btn">＋ カテゴリ追加</button>
+      <div class="input-group">
+        <input type="text" id="quickAddContent" placeholder="内容を入力" />
+      </div>
+      <button class="btn" onclick="quickAdd()">追加</button>
+      <button class="btn btn-secondary" style="margin-top:10px" onclick="closeModal()">キャンセル</button>
     </div>
-    <div id="categoryHint" class="small muted">例：フォロワー数 / 体重 / 月収 など。自由に追加できます。</div>
-  </section>
+  </div>
 
-  <!-- 目標入力 -->
-  <section class="card grid">
-    <div class="section-title">目標設定 & 逆算</div>
-    <div class="split">
-      <div>
-        <label>目標タイトル</label>
-        <input id="goalTitle" placeholder="例：体重 65kg / フォロワー 1万人 / 月収 50万円">
-      </div>
-      <div>
-        <label>単位（任意）</label>
-        <input id="goalUnit" placeholder="例：kg, 人, 円">
-      </div>
-      <div>
-        <label>目標値（数値）</label>
-        <input id="goalTarget" type="number" inputmode="decimal" placeholder="例：65 or 10000 or 500000">
-      </div>
-      <div>
-        <label>現在値（数値 / 初回）</label>
-        <input id="goalCurrent" type="number" inputmode="decimal" placeholder="例：72">
-      </div>
-      <div>
-        <label>期限</label>
-        <input id="goalDeadline" type="date">
-      </div>
-      <div style="display:flex;align-items:flex-end">
-        <button id="addGoalBtn" class="btn primary" style="width:100%">＋ 目標を登録</button>
-      </div>
-    </div>
-    <div class="small muted">※ 逆算は「(目標−現在) ÷ 残り日数」で1日あたりの必要量を表示します（減量などマイナス目標にも対応）。</div>
-  </section>
+  <script>
+    // ====== データ層 ======
+    const SCHEMA_VERSION = 1;
+    let goals = [];
+    let tasks = [];
+    let inventory = {};
+    let values = [];
+    let streak = 0;
+    let history = []; // {date:'YYYY-MM-DD', goalsCompleted:n, tasksCompleted:n}
+    let habits = {};  // {'YYYY-MM-DD': true/false}
+    let deferredPrompt = null;
 
-  <!-- 現在地（選択カテゴリのサマリ） -->
-  <section class="card grid" id="summaryCard" style="display:none">
-    <div class="section-title">現在地（選択カテゴリ）</div>
-    <div class="kpi">
-      <div>
-        <div class="small muted">進捗</div>
-        <b id="sumProgress">0%</b>
-      </div>
-      <div>
-        <div class="small muted">残り日数</div>
-        <b id="sumDaysLeft">—</b>
-      </div>
-      <div>
-        <div class="small muted">1日あたり必要量</div>
-        <b id="sumPerDay">—</b>
-      </div>
-    </div>
-    <div class="progress"><div id="sumBar" class="bar" style="width:0%"></div></div>
-    <div id="paceNote" class="small muted"></div>
-  </section>
-
-  <!-- 目標一覧（カテゴリ内） -->
-  <section class="card grid">
-    <div class="section-title">目標一覧</div>
-    <div id="goalsList" class="list"></div>
-  </section>
-
-</main>
-
-<footer class="footer small">
-  v0.1 MVP / 端末保存（localStorage）。バックアップは右上のエクスポートをご利用ください。
-</footer>
-
-<script>
-(function(){
-  const KEY = 'life-mvp-v01';
-
-  /** ---------- 状態 ---------- */
-  let state = load() || seed();
-
-  function seed(){
-    // 初回に3カテゴリだけ用意（自由に消せます）
-    return {
-      categories: [
-        { id: uid(), name:'フォロワー数', goals:[] },
-        { id: uid(), name:'体重', goals:[] },
-        { id: uid(), name:'月収', goals:[] },
-      ],
-      selectedCategoryId: null
+    // 安全なパース
+    const safeParse = (str, fallback) => {
+      try { return JSON.parse(str); } catch { return fallback; }
     };
-  }
+    const todayISO = () => new Date().toISOString().slice(0,10);
+    const h = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  function uid(){ return Math.random().toString(36).slice(2,9); }
-  function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
-  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
+    function loadData(){
+      const store = safeParse(localStorage.getItem('gm_store'), {});
+      if (store.version !== SCHEMA_VERSION) {
+        // 今回は互換とみなし、そのまま読み込み
+      }
+      goals   = store.goals   ?? safeParse(localStorage.getItem('goals'), []);
+      tasks   = store.tasks   ?? safeParse(localStorage.getItem('tasks'), []);
+      inventory = store.inventory ?? safeParse(localStorage.getItem('inventory'), {});
+      values  = store.values  ?? safeParse(localStorage.getItem('values'), []);
+      streak  = Number(store.streak ?? localStorage.getItem('streak') ?? 0) || 0;
+      history = store.history ?? [];
+      habits  = store.habits  ?? {};
+    }
 
-  /** ---------- DOM ---------- */
-  const selCat = document.getElementById('categorySelect');
-  const addCategoryBtn = document.getElementById('addCategoryBtn');
-  const addGoalBtn = document.getElementById('addGoalBtn');
-  const goalsList = document.getElementById('goalsList');
-  const exportBtn = document.getElementById('exportBtn');
-  const importFile = document.getElementById('importFile');
+    function saveData(){
+      const payload = {version:SCHEMA_VERSION, goals, tasks, inventory, values, streak, history, habits};
+      localStorage.setItem('gm_store', JSON.stringify(payload));
+      // 後方互換（古いキーを使っている場合）
+      localStorage.setItem('goals', JSON.stringify(goals));
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      localStorage.setItem('inventory', JSON.stringify(inventory));
+      localStorage.setItem('values', JSON.stringify(values));
+      localStorage.setItem('streak', String(streak));
+    }
 
-  const goalTitle = document.getElementById('goalTitle');
-  const goalUnit = document.getElementById('goalUnit');
-  const goalTarget = document.getElementById('goalTarget');
-  const goalCurrent = document.getElementById('goalCurrent');
-  const goalDeadline = document.getElementById('goalDeadline');
+    // ====== 起動処理 ======
+    function initApp(){
+      loadData();
+      initPWA();
+      hydrateFormValues();
+      enforceMinDate();
+      checkStreak();
+      updateDashboard();
+      updateGoalsList();
+      updateTaskList();
+      initChart();
+      generateHabitGrid();
+      renderAchievements();
+    }
 
-  const sumCard = document.getElementById('summaryCard');
-  const sumProgress = document.getElementById('sumProgress');
-  const sumDaysLeft = document.getElementById('sumDaysLeft');
-  const sumPerDay = document.getElementById('sumPerDay');
-  const sumBar = document.getElementById('sumBar');
-  const paceNote = document.getElementById('paceNote');
+    function hydrateFormValues(){
+      document.getElementById('strengths').value = inventory.strengths ?? '';
+      document.getElementById('weaknesses').value = inventory.weaknesses ?? '';
+      document.getElementById('opportunities').value = inventory.opportunities ?? '';
+      document.getElementById('threats').value = inventory.threats ?? '';
+      document.getElementById('value1').value = values[0] ?? '';
+      document.getElementById('value2').value = values[1] ?? '';
+      document.getElementById('value3').value = values[2] ?? '';
+    }
 
-  /** ---------- 初期描画 ---------- */
-  renderCategories();
-  if(!state.selectedCategoryId && state.categories[0]){
-    state.selectedCategoryId = state.categories[0].id; save();
-  }
-  renderAll();
+    function enforceMinDate(){
+      const d = document.getElementById('goalDeadline');
+      const t = todayISO();
+      d.min = t;
+    }
 
-  /** ---------- カテゴリ ---------- */
-  addCategoryBtn.addEventListener('click', () => {
-    const name = prompt('カテゴリ名を入力（例：英語学習、資産、読書数など）');
-    if(!name) return;
-    state.categories.push({ id: uid(), name, goals:[] });
-    state.selectedCategoryId = state.categories[state.categories.length-1].id;
-    save(); renderCategories(); renderAll();
-  });
+    // ====== タブ切替（暗黙event排除）======
+    function switchTab(btn, tabName){
+      document.querySelectorAll('.nav-tab').forEach(t=>{ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      if(tabName==='progress'){ updateChart(); }
+    }
 
-  selCat.addEventListener('change', () => {
-    state.selectedCategoryId = selCat.value;
-    save(); renderAll();
-  });
+    // ====== ダッシュボード ======
+    function updateDashboard(){
+      const total = goals.length;
+      const active = goals.filter(g=>!g.completed).length;
+      const completed = goals.filter(g=>g.completed).length;
+      const completionRate = total>0 ? Math.round((completed/total)*100) : 0;
+      document.getElementById('totalGoals').textContent = total;
+      document.getElementById('activeGoals').textContent = active;
+      document.getElementById('completionRate').textContent = completionRate + '%';
+      document.getElementById('streak').textContent = streak + '日';
 
-  function renderCategories(){
-    selCat.innerHTML = '';
-    state.categories.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c.id; opt.textContent = c.name;
-      if(c.id === state.selectedCategoryId) opt.selected = true;
-      selCat.appendChild(opt);
+      // 今日のフォーカス：未完了 → 締切が近い → 進捗が少ない で上位3件
+      const focus = goals
+        .filter(g=>!g.completed)
+        .sort((a,b)=> (new Date(a.deadline)-new Date(b.deadline)) || (a.progress??0)-(b.progress??0))
+        .slice(0,3);
+      const wrap = document.getElementById('todaysFocus');
+      if(focus.length===0){
+        wrap.innerHTML = '<div class="empty-state"><p>今日の目標を設定しましょう！</p></div>';
+      }else{
+        wrap.innerHTML = focus.map(goal => `
+          <div class="goal-item">
+            <div class="goal-title">${h(goal.name)}</div>
+            <div class="goal-deadline">期限: ${h(goal.deadline || '-')}</div>
+            <div class="progress-bar" style="margin-top:8px">
+              <div class="progress-fill" style="width:${goal.progress||0}%">${goal.progress||0}%</div>
+            </div>
+          </div>
+        `).join('');
+      }
+      updateOverallProgress();
+    }
+
+    // ====== 目標 ======
+    function addGoal(){
+      const name = document.getElementById('goalName').value.trim();
+      const category = document.getElementById('goalCategory').value;
+      const deadline = document.getElementById('goalDeadline').value;
+      const metric = document.getElementById('goalMetric').value.trim();
+      const why = document.getElementById('goalWhy').value.trim();
+      if(!name || !deadline){ alert('目標名と期限は必須です'); return; }
+      if(new Date(deadline) < new Date(todayISO())){ alert('期限は今日以降を選択してください'); return; }
+      const goal = { id: Date.now(), name, category, deadline, metric, why, progress:0, completed:false, createdAt:new Date().toISOString() };
+      goals.push(goal);
+      // リセット
+      document.getElementById('goalName').value='';
+      document.getElementById('goalDeadline').value='';
+      document.getElementById('goalMetric').value='';
+      document.getElementById('goalWhy').value='';
+      saveData();
+      updateDashboard();
+      updateGoalsList();
+      showNotification('目標が追加されました！');
+    }
+
+    function updateGoalsList(){
+      const list = document.getElementById('goalsList');
+      if(goals.length===0){ list.innerHTML = '<div class="empty-state"><p>まだ目標が設定されていません</p></div>'; return; }
+      const sortBy = document.getElementById('sortGoals').value;
+      const filter = document.getElementById('filterCategory').value;
+      let data = [...goals];
+      if(filter!=='all') data = data.filter(g=>g.category===filter);
+      if(sortBy==='deadline') data.sort((a,b)=> new Date(a.deadline) - new Date(b.deadline));
+      if(sortBy==='progress') data.sort((a,b)=> (a.progress??0) - (b.progress??0));
+      if(sortBy==='created') data.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+      list.innerHTML = data.map(goal => `
+        <div class="goal-item">
+          <div class="goal-title">${h(goal.name)}</div>
+          <div class="goal-deadline">期限: ${h(goal.deadline || '-')}</div>
+          <div style="margin-top:8px">
+            <label>進捗: ${goal.progress||0}%</label>
+            <input type="range" min="0" max="100" value="${goal.progress||0}"
+              oninput="updateGoalProgress(${goal.id}, this.value)" style="width:100%;margin-top:6px" />
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button class="btn btn-small" onclick="toggleCompleteGoal(${goal.id})">${goal.completed?'未完了に戻す':'完了'}</button>
+            <button class="btn btn-small btn-secondary" onclick="deleteGoal(${goal.id})">削除</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateGoalProgress(goalId, progress){
+      const g = goals.find(x=>x.id===goalId);
+      if(!g) return;
+      g.progress = parseInt(progress);
+      if(g.progress===100 && !g.completed){
+        g.completed = true;
+        addHistory({goalsCompleted:1});
+        showNotification('🎉 目標達成おめでとうございます！');
+      }
+      saveData();
+      updateDashboard();
+      updateChart();
+      updateGoalsList();
+    }
+
+    function toggleCompleteGoal(goalId){
+      const g = goals.find(x=>x.id===goalId);
+      if(!g) return;
+      g.completed = !g.completed;
+      if(g.completed){
+        g.progress = 100;
+        addHistory({goalsCompleted:1});
+        showNotification('🎉 目標達成おめでとうございます！');
+      }
+      saveData();
+      updateDashboard();
+      updateGoalsList();
+    }
+
+    function deleteGoal(goalId){
+      if(!confirm('この目標を削除してもよろしいですか？')) return;
+      goals = goals.filter(g=>g.id!==goalId);
+      saveData();
+      updateDashboard();
+      updateGoalsList();
+    }
+
+    // ====== 在庫/価値観 ======
+    function saveInventory(){
+      inventory = {
+        strengths: document.getElementById('strengths').value,
+        weaknesses: document.getElementById('weaknesses').value,
+        opportunities: document.getElementById('opportunities').value,
+        threats: document.getElementById('threats').value
+      };
+      saveData();
+      showNotification('分析が保存されました');
+    }
+    function saveValues(){
+      values = [
+        document.getElementById('value1').value,
+        document.getElementById('value2').value,
+        document.getElementById('value3').value
+      ];
+      saveData();
+      showNotification('価値観が保存されました');
+    }
+
+    // ====== タスク ======
+    function addTask(){
+      const input = document.getElementById('newTask');
+      const text = input.value.trim();
+      if(!text){ alert('タスクを入力してください'); return; }
+      const task = { id: Date.now(), text, completed:false, createdAt:new Date().toISOString(), completedAt:null };
+      tasks.push(task);
+      saveData();
+      updateTaskList();
+      input.value='';
+      showNotification('タスクが追加されました');
+    }
+    // Enter で追加
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter' && document.activeElement.id==='newTask'){ addTask(); }
     });
-  }
 
-  /** ---------- 目標追加 ---------- */
-  addGoalBtn.addEventListener('click', () => {
-    const title = (goalTitle.value || '').trim();
-    const unit = (goalUnit.value || '').trim();
-    const target = Number(goalTarget.value);
-    const current = Number(goalCurrent.value);
-    const deadline = goalDeadline.value;
-
-    if(!state.selectedCategoryId){ alert('先にカテゴリを選択/作成してください'); return; }
-    if(!title){ alert('目標タイトルを入力してください'); return; }
-    if(!deadline){ alert('期限（日付）を選んでください'); return; }
-    if(Number.isNaN(target) || Number.isNaN(current)){ alert('目標値と現在値は数値で入力してください'); return; }
-
-    const cat = state.categories.find(c=>c.id===state.selectedCategoryId);
-    cat.goals.push({
-      id: uid(), title, unit, target, deadline,
-      history: [{ date: today(), value: current }],
-      note: ''
-    });
-    save();
-    // 入力リセット
-    goalTitle.value = ''; goalUnit.value=''; goalTarget.value=''; goalCurrent.value=''; goalDeadline.value='';
-    renderAll();
-  });
-
-  /** ---------- 画面描画 ---------- */
-  function renderAll(){
-    const cat = state.categories.find(c=>c.id===state.selectedCategoryId);
-    renderSummary(cat);
-    renderGoals(cat);
-  }
-
-  function renderSummary(cat){
-    if(!cat || cat.goals.length===0){ sumCard.style.display='none'; return; }
-    sumCard.style.display='grid';
-
-    // 代表：最も期限が近い目標でサマリ表示
-    const soon = [...cat.goals].sort((a,b)=>a.deadline.localeCompare(b.deadline))[0];
-    const {progress, daysLeft, perDay, direction} = calc(soon);
-
-    sumProgress.textContent = `${progress}%`;
-    sumDaysLeft.textContent = daysLeft >= 0 ? `${daysLeft}日` : `期限超過(${Math.abs(daysLeft)}日)`;
-    sumPerDay.textContent = perDay === null ? '—' : `${perDay}${soon.unit||''}/日`;
-    sumBar.style.width = `${progress}%`;
-
-    let note = `代表目標：「${soon.title}」`;
-    if(perDay !== null){
-      note += `。今日から ${direction}${Math.abs(perDay)}${soon.unit||''}/日 のペースでOK`;
+    function updateTaskList(){
+      const list = document.getElementById('taskList');
+      const today = new Date().toDateString();
+      const todayTasks = tasks.filter(t=> new Date(t.createdAt).toDateString() === today);
+      if(todayTasks.length===0){ list.innerHTML = '<p style="color:#6c757d">今日のタスクはありません</p>'; return; }
+      list.innerHTML = todayTasks.map(t => `
+        <div style="display:flex;align-items:center;padding:10px;background:#f8f9fa;border-radius:8px;margin-bottom:8px">
+          <input type="checkbox" ${t.completed?'checked':''} onchange="toggleTask(${t.id})" style="margin-right:10px" />
+          <span style="${t.completed?'text-decoration:line-through;color:#6c757d':''}">${h(t.text)}</span>
+          <button onclick="deleteTask(${t.id})" style="margin-left:auto;background:none;border:none;color:#dc3545;cursor:pointer">×</button>
+        </div>
+      `).join('');
+      updateOverallProgress();
     }
-    paceNote.textContent = note;
-  }
 
-  function renderGoals(cat){
-    goalsList.innerHTML = '';
-    if(!cat){ return; }
-    cat.goals.forEach(goal => {
-      const h = latest(goal);
-      const {progress, daysLeft, perDay, needs} = calc(goal);
+    function toggleTask(id){
+      const t = tasks.find(x=>x.id===id);
+      if(!t) return;
+      t.completed = !t.completed;
+      t.completedAt = t.completed ? new Date().toISOString() : null;
+      if(t.completed) addHistory({tasksCompleted:1});
+      saveData();
+      updateTaskList();
+      updateOverallProgress();
+      updateChart();
+    }
 
-      const wrap = document.createElement('div');
-      wrap.className = 'item';
-      wrap.innerHTML = `
-        <div class="flex" style="justify-content:space-between;">
-          <div class="flex" style="gap:6px;align-items:baseline">
-            <b>${escapeHtml(goal.title)}</b>
-            ${goal.unit? `<span class="pill">${escapeHtml(goal.unit)}</span>`:''}
-          </div>
-          <div class="toolbar">
-            <button class="btn small ghost" data-act="edit">編集</button>
-            <button class="btn small ghost danger" data-act="del">削除</button>
-          </div>
-        </div>
+    function deleteTask(id){
+      tasks = tasks.filter(t=>t.id!==id);
+      saveData();
+      updateTaskList();
+      updateOverallProgress();
+    }
 
-        <div class="split">
-          <div class="kpi"><div class="small muted">現在値</div><b>${fmt(h.value)}${goal.unit||''}</b></div>
-          <div class="kpi"><div class="small muted">目標値</div><b>${fmt(goal.target)}${goal.unit||''}</b></div>
-          <div class="kpi"><div class="small muted">期限</div><b>${goal.deadline}</b></div>
-        </div>
+    // ====== 全体進捗 ======
+    function updateOverallProgress(){
+      const total = goals.length + tasks.length;
+      const done = goals.filter(g=>g.completed).length + tasks.filter(t=>t.completed).length;
+      const pct = total>0 ? Math.round((done/total)*100) : 0;
+      const bar = document.getElementById('overallProgress');
+      bar.style.width = pct + '%';
+      bar.textContent = pct + '%';
+    }
 
-        <div class="progress"><div class="bar" style="width:${progress}%"></div></div>
-        <div class="flex">
-          <span class="pill ${badgeColor(progress)}">進捗 ${progress}%</span>
-          <span class="pill">${daysLeft>=0?`残り ${daysLeft}日`:`期限超過 ${Math.abs(daysLeft)}日`}</span>
-          <span class="pill">${perDay===null?`目標到達`: `必要 ${needs}`}</span>
-        </div>
+    // ====== 履歴/グラフ ======
+    function addHistory({goalsCompleted=0, tasksCompleted=0}={}){
+      const d = todayISO();
+      const rec = history.find(h=>h.date===d);
+      if(rec){ rec.goalsCompleted += goalsCompleted; rec.tasksCompleted += tasksCompleted; }
+      else{ history.push({date:d, goalsCompleted, tasksCompleted}); }
+      // 30日分だけ保持
+      history = history.slice(-30);
+      saveData();
+    }
 
-        <div class="split">
-          <div>
-            <label>今日の記録（数値を入力）</label>
-            <input type="number" inputmode="decimal" placeholder="例：68" data-field="daily">
-          </div>
-          <div style="display:flex;align-items:flex-end">
-            <button class="btn" data-act="addDaily">＋ 記録</button>
-          </div>
-          <div>
-            <label>軌道修正メモ（任意）</label>
-            <textarea data-field="note" placeholder="例：出張で外食が続いたので週末で調整など。">${escapeHtml(goal.note||'')}</textarea>
-          </div>
-          <div style="display:flex;align-items:flex-end">
-            <button class="btn" data-act="saveNote">メモ保存</button>
-          </div>
-        </div>
+    function initChart(){
+      const canvas = document.getElementById('progressChart');
+      const ctx = canvas.getContext('2d');
+      resizeCanvasForDPR(canvas);
+      drawChart();
+      window.addEventListener('resize', ()=>{ resizeCanvasForDPR(canvas); drawChart(); });
+    }
 
-        <div class="small muted">履歴：${goal.history.slice(-5).map(r=>`${r.date}:${fmt(r.value)}`).join(' / ')}</div>
-      `;
+    function resizeCanvasForDPR(canvas){
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width  = Math.round(rect.width * dpr);
+      canvas.height = Math.round(300 * dpr);
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
 
-      // イベント
-      wrap.querySelector('[data-act="addDaily"]').addEventListener('click', ()=>{
-        const v = wrap.querySelector('[data-field="daily"]').value;
-        if(v===''){ alert('数値を入力してください'); return; }
-        goal.history.push({ date: today(), value: Number(v) });
-        save(); renderAll();
+    function updateChart(){ drawChart(); }
+
+    function drawChart(){
+      const canvas = document.getElementById('progressChart');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // 直近7日
+      const days = [];
+      for(let i=6;i>=0;i--){
+        const d = new Date(); d.setDate(d.getDate()-i);
+        days.push(d.toISOString().slice(0,10));
+      }
+      const series = days.map(d=>{
+        const rec = history.find(h=>h.date===d) || {goalsCompleted:0, tasksCompleted:0};
+        return rec.goalsCompleted + rec.tasksCompleted;
       });
 
-      wrap.querySelector('[data-act="saveNote"]').addEventListener('click', ()=>{
-        goal.note = wrap.querySelector('[data-field="note"]').value || '';
-        save();
+      const labels = ['月','火','水','木','金','土','日'];
+      const startDow = new Date().getDay(); // 0=Sun
+      const jpDays = ['日','月','火','水','木','金','土'];
+      const label7 = days.map((_,i)=>{
+        const dt = new Date(); dt.setDate(dt.getDate()-(6-i));
+        return jpDays[dt.getDay()];
       });
 
-      wrap.querySelector('[data-act="del"]').addEventListener('click', ()=>{
-        if(!confirm('この目標を削除します。よろしいですか？')) return;
-        cat.goals = cat.goals.filter(g=>g.id!==goal.id);
-        save(); renderAll();
+      const chartWidth = canvas.clientWidth - 60;
+      const chartHeight = 300 - 60;
+      const barWidth = (chartWidth / 7) * 0.6;
+      const maxValue = Math.max(3, ...series);
+
+      // grid
+      ctx.strokeStyle = '#e9ecef';
+      ctx.lineWidth = 1;
+      for(let i=0;i<=5;i++){
+        const y = 30 + (chartHeight/5)*i;
+        ctx.beginPath(); ctx.moveTo(30,y); ctx.lineTo(30+chartWidth,y); ctx.stroke();
+        ctx.fillStyle = '#6c757d'; ctx.font = '12px sans-serif'; ctx.textAlign='right';
+        const val = Math.round(maxValue - (maxValue/5)*i);
+        ctx.fillText(val, 25, y+4);
+      }
+
+      // bars
+      label7.forEach((day, idx)=>{
+        const val = series[idx];
+        const barH = (val / maxValue) * chartHeight;
+        const x = 30 + (chartWidth/7)*idx + ((chartWidth/7) - barWidth)/2;
+        const y = 30 + chartHeight - barH;
+        const grad = ctx.createLinearGradient(0,y,0,y+barH);
+        grad.addColorStop(0,'#667eea'); grad.addColorStop(1,'#764ba2');
+        ctx.fillStyle = grad; ctx.fillRect(x,y,barWidth,barH);
+        ctx.fillStyle = '#6c757d'; ctx.font='12px sans-serif'; ctx.textAlign='center';
+        ctx.fillText(day, x+barWidth/2, 300-10);
+        ctx.fillStyle = '#2c3e50'; ctx.font='bold 12px sans-serif';
+        if(val>0) ctx.fillText(String(val), x+barWidth/2, y-5);
       });
+    }
 
-      wrap.querySelector('[data-act="edit"]').addEventListener('click', ()=>{
-        const title = prompt('タイトル', goal.title) ?? goal.title;
-        const unit = prompt('単位（空でも可）', goal.unit||'') ?? (goal.unit||'');
-        const target = Number(prompt('目標値', goal.target));
-        const deadline = prompt('期限 (YYYY-MM-DD)', goal.deadline) ?? goal.deadline;
-        if(Number.isNaN(target)){ alert('目標値は数値で'); return; }
-        goal.title = title.trim()||goal.title;
-        goal.unit = unit.trim();
-        goal.target = target;
-        goal.deadline = deadline;
-        save(); renderAll();
+    // ====== 習慣トラッカー（永続化）======
+    function generateHabitGrid(){
+      const grid = document.querySelector('.habit-grid');
+      if(!grid) return;
+      let html = '';
+      for(let i=29;i>=0;i--){
+        const date = new Date(); date.setDate(date.getDate()-i);
+        const key = date.toISOString().slice(0,10);
+        const done = !!habits[key];
+        const color = done ? 'linear-gradient(135deg,#667eea 0%,#764ba2 100%)' : '#e9ecef';
+        html += `<button class="habit-cell" data-key="${key}" style="width:100%;aspect-ratio:1;background:${color};border:none;border-radius:6px;cursor:pointer" aria-label="${key}の習慣 ${done?'達成':'未達'}"></button>`;
+      }
+      grid.innerHTML = html;
+      grid.querySelectorAll('.habit-cell').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          const k = el.dataset.key;
+          habits[k] = !habits[k];
+          el.style.background = habits[k] ? 'linear-gradient(135deg,#667eea 0%,#764ba2 100%)' : '#e9ecef';
+          saveData();
+        });
       });
-
-      goalsList.appendChild(wrap);
-    });
-  }
-
-  /** ---------- 計算系 ---------- */
-  function latest(goal){ return goal.history[goal.history.length-1]; }
-  function daysUntil(dateStr){
-    const today = new Date(); today.setHours(0,0,0,0);
-    const d = new Date(dateStr); d.setHours(0,0,0,0);
-    return Math.round((d - today) / (1000*60*60*24));
-  }
-  function calc(goal){
-    const cur = latest(goal).value;
-    const target = goal.target;
-    const dist = target - cur; // 正:増やす, 負:減らす
-    const daysLeft = daysUntil(goal.deadline);
-    let progress;
-    // 進捗%: 目標方向にどれだけ近づいたか（現在値と初期値が同じと仮定）
-    const start = goal.history[0]?.value ?? cur;
-    const total = Math.abs(target - start);
-    if(total === 0){ progress = 100; }
-    else{
-      const gained = Math.abs(cur - start);
-      progress = Math.max(0, Math.min(100, Math.round((gained/total)*100)));
     }
-    let perDay = null, needs = '—', direction = '';
-    if(daysLeft > 0 && dist !== 0){
-      perDay = round(Math.abs(dist / daysLeft), 3);
-      direction = dist>0 ? '+' : '−';
-      needs = `${direction}${perDay}${goal.unit||''}/日`;
-    }
-    if(daysLeft <= 0 && Math.sign(dist)!==0){
-      needs = '期限超過：再設定を推奨';
-    }
-    return {progress, daysLeft, perDay, needs, direction};
-  }
 
-  function round(n, d){ const p = Math.pow(10,d); return Math.round(n*p)/p; }
-  function today(){ const d = new Date(); const m = ('0'+(d.getMonth()+1)).slice(-2); const day=('0'+d.getDate()).slice(-2); return `${d.getFullYear()}-${m}-${day}`; }
-  function fmt(n){ return (Math.round((n + Number.EPSILON)*1000)/1000).toString(); }
-  function badgeColor(p){ if(p>=80) return 'ok'; if(p>=40) return 'warn'; return 'danger'; }
-  function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
-
-  /** ---------- エクスポート/インポート ---------- */
-  exportBtn.addEventListener('click', ()=>{
-    const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `life-mvp-backup-${Date.now()}.json`;
-    a.click();
-    setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
-  });
-  importFile.addEventListener('change', async (e)=>{
-    const file = e.target.files[0]; if(!file) return;
-    try{
-      const txt = await file.text();
-      const data = JSON.parse(txt);
-      if(!data.categories) throw new Error('形式が不正です');
-      state = data; save(); renderCategories(); renderAll();
-      alert('インポートしました');
-    }catch(err){
-      alert('読み込みに失敗しました：' + err.message);
-    }finally{
-      e.target.value='';
+    // ====== ストリーク ======
+    function checkStreak(){
+      const today = new Date().toDateString();
+      const saved = localStorage.getItem('lastVisit');
+      if(saved){
+        const diffDays = Math.round((new Date(today) - new Date(saved)) / (1000*60*60*24));
+        if(diffDays===1) streak++;
+        else if(diffDays>1) streak = 1;
+      } else { streak = 1; }
+      localStorage.setItem('lastVisit', today);
+      saveData();
     }
-  });
 
-})();
-</script>
+    // ====== クイック追加 ======
+    function showQuickAdd(){ document.getElementById('quickAddModal').classList.add('active'); document.getElementById('quickAddContent').focus(); }
+    function closeModal(){ document.getElementById('quickAddModal').classList.remove('active'); }
+    function quickAdd(){
+      const type = document.getElementById('quickAddType').value;
+      const content = document.getElementById('quickAddContent').value.trim();
+      if(!content){ alert('内容を入力してください'); return; }
+      if(type==='goal'){
+        const goal = { id:Date.now(), name:content, category:'personal', deadline: new Date(Date.now()+30*24*60*60*1000).toISOString().slice(0,10), progress:0, completed:false, createdAt:new Date().toISOString() };
+        goals.push(goal);
+        updateGoalsList();
+      }else if(type==='task'){
+        const task = { id:Date.now(), text:content, completed:false, createdAt:new Date().toISOString(), completedAt:null };
+        tasks.push(task);
+        updateTaskList();
+      }
+      saveData(); updateDashboard(); closeModal();
+      document.getElementById('quickAddContent').value='';
+      showNotification('追加されました！');
+    }
+
+    // ====== 通知 ======
+    function showNotification(message){
+      const n = document.createElement('div');
+      n.style.cssText = `
+        position:fixed;top:20px;right:20px;background:var(--grad);color:#fff;padding:12px 14px;border-radius:10px;
+        box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:10000`;
+      n.textContent = message;
+      document.body.appendChild(n);
+      setTimeout(()=>{ n.style.opacity='0'; n.style.transition='opacity .3s'; setTimeout(()=>n.remove(),300); }, 2000);
+    }
+
+    // ====== 実績バッジ ======
+    function renderAchievements(){
+      const wrap = document.getElementById('achievements');
+      const badges = [];
+      if(goals.length>0) badges.push('🎯 初めての目標設定');
+      if(streak>=3) badges.push('🔥 3日連続ログイン');
+      if(goals.some(g=>g.completed)) badges.push('⭐ 目標達成');
+      wrap.innerHTML = badges.map(b=>`<span class="linklike" aria-label="実績">${h(b)}</span>`).join('') || '<div class="empty-state"><p>実績はまだありません</p></div>';
+    }
+
+    // ====== PWA / エクスポート・インポート ======
+    function initPWA(){
+      if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+      window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display='inline-block'; });
+      document.getElementById('installBtn').addEventListener('click', async ()=>{
+        if(!deferredPrompt) return;
+        deferredPrompt.prompt(); deferredPrompt = null;
+        document.getElementById('installBtn').style.display='none';
+      });
+      document.getElementById('exportBtn').addEventListener('click', ()=>{
+        const blob = new Blob([localStorage.getItem('gm_store') ?? '{}'], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `goalmaster-backup-${todayISO()}.json`; a.click();
+        URL.revokeObjectURL(url);
+      });
+      document.getElementById('importFile').addEventListener('change', async (e)=>{
+        const file = e.target.files[0]; if(!file) return;
+        const text = await file.text();
+        const data = safeParse(text, null);
+        if(!data){ alert('JSON の読み込みに失敗しました'); return; }
+        localStorage.setItem('gm_store', JSON.stringify(data));
+        loadData(); hydrateFormValues(); updateDashboard(); updateGoalsList(); updateTaskList(); generateHabitGrid(); renderAchievements(); updateChart();
+        showNotification('データをインポートしました');
+      });
+    }
+
+    // ====== 初期化 ======
+    window.addEventListener('load', initApp);
+  </script>
 </body>
 </html>
