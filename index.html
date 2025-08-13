@@ -3,13 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>目標管理 v2｜言語化 × 毎日チェック × 数値グラフ</title>
+<title>目標管理 v2.2｜過去入力＋日曜自動エクスポート</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
   :root{
     --bg:#0f1216; --card:#171b21; --muted:#9fb3c8; --text:#e7edf5;
     --ok:#16a34a; --primary:#4691eb; --chip:#233043; --border:#223042;
-    --danger:#ef4444; --accent:#f59e0b;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);
@@ -24,7 +23,6 @@
   button{background:var(--primary);color:#fff;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
   button.ghost{background:#233043}
   button.warn{background:#b45309}
-  button:disabled{opacity:.5;cursor:not-allowed}
   input,select,textarea{width:100%;background:#0b0f14;color:var(--text);
     border:1px solid var(--border);border-radius:12px;padding:10px}
   textarea{min-height:72px;resize:vertical}
@@ -41,8 +39,9 @@
   .day{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
        border-radius:10px;border:1px solid var(--border);font-size:14px;color:#cfe0ff;
        background:#0b0f14;cursor:pointer;user-select:none}
-  .day.off{opacity:.35;cursor:default}
+  .day.off{opacity:.35;cursor:pointer}
   .day.done{background:#0f2b1d;border-color:#205339;color:#d2ffe8;box-shadow:inset 0 0 0 2px #205339}
+  .day.selected{outline:2px solid #79a7ff}
   .kpi{display:grid;gap:8px;grid-template-columns:repeat(2,1fr);margin:8px 0}
   .kpi .cell{background:#0b0f14;border:1px solid var(--border);padding:12px;border-radius:12px}
   .kpi .cell b{display:block;font-size:18px}
@@ -54,7 +53,6 @@
   .fixed-month{display:flex;align-items:center;gap:8px;justify-content:flex-end}
   .month{min-width:140px;text-align:center;font-weight:700}
   canvas{max-height:260px}
-  footer{padding:32px 0;text-align:center;color:var(--muted);font-size:12px}
 </style>
 </head>
 <body>
@@ -80,7 +78,7 @@
   <!-- 左 -->
   <section>
     <div class="card hint">
-      ①左で<strong>目標を追加</strong> → ②右の<strong>カレンダーの日付をタップ</strong>（やった日が緑） → ③下の<strong>数値を記録</strong>すると、折れ線グラフに出ます。
+      ①<strong>目標を追加</strong> → ②<strong>記録したい日をタップ</strong>（選択枠） → ③<strong>その日の値/メモ/実施</strong>を保存。右上の日付ピッカーで過去日指定もOK。
     </div>
 
     <div class="card">
@@ -138,15 +136,26 @@
 
       <div class="split" style="margin-top:14px">
         <div>
-          <label class="small">今日の数値（任意）</label>
+          <label class="small">記録対象日</label>
+          <input type="date" id="datePicker">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:22px">
+          <input type="checkbox" id="doneCheck">
+          <label for="doneCheck" class="small">この日を「やった」にする</label>
+        </div>
+      </div>
+
+      <div class="split" style="margin-top:8px">
+        <div>
+          <label class="small">この日の数値（任意）</label>
           <div style="display:flex;gap:8px">
             <input id="todayValue" type="number" step="any" placeholder="例）67.8 / 3 / 12000">
-            <button id="saveValueBtn">記録</button>
+            <button id="saveValueBtn">保存</button>
           </div>
           <div class="small muted" id="valueHint"></div>
         </div>
         <div>
-          <label class="small">今日のメモ（任意）</label>
+          <label class="small">この日のメモ（任意）</label>
           <input id="todayNote" placeholder="例）外食／睡眠不足／動画投稿 など">
         </div>
       </div>
@@ -154,16 +163,14 @@
 
     <div class="card">
       <h3 class="sec-title">数値グラフ</h3>
-      <div id="emptyChart" class="hint" style="display:none">まだ数値がありません。「今日の数値」を記録すると、ここに折れ線グラフが表示されます。</div>
+      <div id="emptyChart" class="hint" style="display:none">まだ数値がありません。「この日の数値」を保存すると、ここに折れ線グラフが表示されます。</div>
       <canvas id="chart" height="120"></canvas>
     </div>
   </section>
 </main>
 
-<footer><div class="wrap">© 2025</div></footer>
-
 <script>
-const STORAGE_KEY='goals.v2';
+const STORAGE_KEY='goals.v2.2';
 let state=load()||{
   goals:[seed('毎朝6:00起床','習慣','平日6:00起床で30分の静かな時間を確保。','',''),
          seed('体重管理','健康','体重と食事の関係を毎日観察。','kg',65),
@@ -174,14 +181,34 @@ let state=load()||{
 if(!state.activeGoalId&&state.goals.length)state.activeGoalId=state.goals[0].id;
 save();
 
+let selectedKey=today(); // 過去入力の選択日
+
 function seed(t,c,s,u,tar){return{id:crypto.randomUUID(),title:t,category:c,statement:s,unit:u,target:tar===''?'':Number(tar),createdAt:today(),days:{}}}
 function load(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))}catch(e){return null}}
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
 function today(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 function ymStr(d){return d.toISOString().slice(0,7)}
-function num(n){if(n===''||n==null||isNaN(n))return'';return Number(n)}
 function fmt(n){return n===''||n==null||isNaN(n)?'-':(''+Number(n)).replace(/(\.\d{0,2}).*$/,'$1')}
+
+/* ===== 日曜自動エクスポート（開いたら自動・1日1回） ===== */
+(function sundayAutoExport(){
+  const now = new Date();
+  const isSunday = now.getDay() === 0;           // ローカル時間で日曜
+  const lastKey = 'last.auto.export.date';
+  const todayLocal = today();                    // ローカル日付（YYYY-MM-DD）
+  const last = localStorage.getItem(lastKey);
+  if(isSunday && last !== todayLocal){
+    const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `goals-export-${todayLocal}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    localStorage.setItem(lastKey, todayLocal);
+    alert('日曜日なので自動でエクスポートしました。ファイルに保存してください。');
+  }
+})();
 
 /* 目標リスト */
 const goalList=$('#goalList');
@@ -230,7 +257,7 @@ $('#deleteGoalBtn').onclick=()=>{
 
 /* 月移動 */
 $('#prevMonthBtn').onclick=()=>shift(-1); $('#nextMonthBtn').onclick=()=>shift(+1);
-$('#todayBtn').onclick=()=>{state.monthCursor=today().slice(0,7);save();refreshRight()}
+$('#todayBtn').onclick=()=>{state.monthCursor=today().slice(0,7); selectedKey=today(); save(); refreshRight()}
 function shift(delta){const [y,m]=state.monthCursor.split('-').map(Number);const d=new Date(y,m-1+delta,1);state.monthCursor=ymStr(d);save();refreshRight()}
 
 /* 右画面 */
@@ -240,6 +267,7 @@ const cal=$('#calendar'); const monthLabel=$('#monthLabel'); const wdRow=$('#wdR
 function refreshRight(){
   const g=state.goals.find(x=>x.id===state.activeGoalId);
   if(!g){cal.innerHTML='<p class="muted small">目標を選択してください。</p>';$('#activeGoalBox').innerHTML='';return}
+
   $('#activeGoalBox').innerHTML=`<div><b>${g.title}</b> <span class="chip">${g.category}</span></div>
   <div class="muted small">${g.statement?g.statement.replace(/\n/g,' '):'（ステートメント未入力）'}</div>
   <div class="small">目標値: <b>${fmt(g.target)}</b> ${g.unit||''}</div>`;
@@ -257,9 +285,12 @@ function refreshRight(){
   cal.innerHTML='';
   cells.forEach(c=>{
     const el=document.createElement('div');
-    el.className='day'+(c.own?'':' off')+(c.done?' done':'');
+    el.className='day'+(c.own?'':' off')+(c.done?' done':'')+(c.key===selectedKey?' selected':'');
     el.title=c.key; el.textContent=c.date.getDate();
-    if(c.own){el.onclick=()=>{const r=g.days[c.key]||{};r.done=!r.done;g.days[c.key]=r;save();refreshRight()}}
+    el.onclick=()=>{
+      if(!c.own){ state.monthCursor=c.key.slice(0,7); }
+      setSelectedDate(c.key);
+    };
     cal.appendChild(el);
   });
 
@@ -269,19 +300,48 @@ function refreshRight(){
   $('#kpiRate').textContent=thisMonth.length?Math.round(doneCount/thisMonth.length*100)+'%':'-';
   $('#kpiStreak').textContent=streak(g);
 
-  // 今日の値/メモ
-  const tk=today(); const rec=g.days[tk]||{};
-  $('#todayValue').value=rec.value??''; $('#todayNote').value=rec.note??'';
-  $('#valueHint').textContent=g.target!==''?`目標値：${g.target} ${g.unit||''}`:(g.unit?`単位：${g.unit}`:'');
+  // 選択日のフィールド反映
+  $('#datePicker').value = selectedKey;
+  fillFieldsFrom(g, selectedKey);
 
+  // グラフ
   drawChart(g);
 }
+
+function setSelectedDate(key){
+  selectedKey = key;
+  save(); refreshRight();
+}
+
+// 日付ピッカー変更
+$('#datePicker').addEventListener('change', (e)=>{
+  const val=e.target.value; if(!val) return;
+  const ym=val.slice(0,7);
+  if(ym!==state.monthCursor) state.monthCursor=ym;
+  setSelectedDate(val);
+});
+
+// 入力欄⇄データ
+function fillFieldsFrom(g, key){
+  const rec=g.days[key]||{};
+  $('#doneCheck').checked=!!rec.done;
+  $('#todayValue').value = rec.value ?? '';
+  $('#todayNote').value  = rec.note  ?? '';
+  $('#valueHint').textContent = g.target!==''?`目標値：${g.target} ${g.unit||''}`:(g.unit?`単位：${g.unit}`:'');
+}
+$('#doneCheck').addEventListener('change', ()=>{
+  const g=state.goals.find(x=>x.id===state.activeGoalId); if(!g) return;
+  const r=g.days[selectedKey]||{}; r.done = $('#doneCheck').checked;
+  g.days[selectedKey]=r; save(); refreshRight();
+});
 $('#saveValueBtn').onclick=()=>{
   const g=state.goals.find(x=>x.id===state.activeGoalId); if(!g)return;
-  const k=today(); const r=g.days[k]||{};
+  const r=g.days[selectedKey]||{};
   const v=$('#todayValue').value; const note=$('#todayNote').value.trim();
-  r.value=v===''?undefined:Number(v); r.note=note||undefined; g.days[k]=r; save(); refreshRight();
-}
+  r.value=v===''?undefined:Number(v); r.note=note||undefined;
+  g.days[selectedKey]=r; save(); refreshRight();
+};
+
 function streak(g){
   let s=0; for(let i=0;i<9999;i++){const d=new Date();d.setDate(d.getDate()-i);
     const k=today(d); const r=g.days[k]; if(r&&r.done){s++}else break} return s+' 日'
@@ -291,36 +351,29 @@ function streak(g){
 let chart;
 function drawChart(g){
   const entries=Object.entries(g.days).filter(([k,v])=>v.value!==undefined).sort((a,b)=>a[0].localeCompare(b[0]));
-  const empty=$('#emptyChart'); const canvas=$('#chart');
+  const empty=$('#emptyChart'); const canvas=document.getElementById('chart');
   if(!entries.length){ empty.style.display='block'; canvas.style.display='none'; if(chart){chart.destroy()} return }
   empty.style.display='none'; canvas.style.display='block';
-
-  const labels=entries.map(([k])=>k.slice(5)); // MM-DD
+  const labels=entries.map(([k])=>k.slice(5));
   const data=entries.map(([,v])=>v.value);
-
   if(chart) chart.destroy();
-  chart=new Chart(canvas,{
-    type:'line',
+  chart=new Chart(canvas,{ type:'line',
     data:{labels,datasets:[{label:g.title+(g.unit?`（${g.unit}）`:''),data,fill:false,tension:.25,pointRadius:3,pointHoverRadius:5}]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#cfe0ff'}},tooltip:{mode:'index',intersect:false}},
-      scales:{
-        x:{ticks:{color:'#9fb3c8'},grid:{color:'#213046'}},
-        y:{ticks:{color:'#9fb3c8'},grid:{color:'#213046'},
-           beginAtZero:false,suggestedMin:Math.min(...data)*0.95,suggestedMax:Math.max(...data)*1.05}
-      }
-    }
+      scales:{x:{ticks:{color:'#9fb3c8'},grid:{color:'#213046'}},
+              y:{ticks:{color:'#9fb3c8'},grid:{color:'#213046'},
+                 beginAtZero:false,suggestedMin:Math.min(...data)*0.95,suggestedMax:Math.max(...data)*1.05}}
   });
 }
 
 /* エクスポート/インポート */
 $('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`goals-export-${today()}.json`; a.click(); URL.revokeObjectURL(a.href)}
-$('#importFile').addEventListener('change',e=>{
+document.getElementById('importFile').addEventListener('change',e=>{
   const f=e.target.files[0]; if(!f) return; const r=new FileReader();
   r.onload=()=>{try{const obj=JSON.parse(r.result); if(!obj.goals) throw new Error('形式が違います');
-    state=obj; save(); renderGoals(); refreshRight(); alert('インポート完了')}catch(err){alert('読み込みエラー: '+err.message)}};
+    state=obj; selectedKey=today(); save(); renderGoals(); refreshRight(); alert('インポート完了')}catch(err){alert('読み込みエラー: '+err.message)}};
   r.readAsText(f);
 });
 
