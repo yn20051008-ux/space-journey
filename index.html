@@ -1,433 +1,52 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>目標管理 v2.4｜V2.2のUI＋日曜はじまり＋自動エクスポート</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<style>
-  :root{
-    --bg:#0f1216; --card:#171b21; --muted:#9fb3c8; --text:#e7edf5;
-    --ok:#16a34a; --primary:#4691eb; --chip:#233043; --border:#223042;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);
-       font:15px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;}
-  header{position:sticky;top:0;z-index:3;backdrop-filter:blur(6px);
-         background:linear-gradient(180deg,rgba(15,18,22,.95),rgba(15,18,22,.75));
-         border-bottom:1px solid var(--border)}
-  .wrap{max-width:1100px;margin:auto;padding:14px 16px}
-  h1{margin:0 0 6px;font-size:20px}
-  .sub{color:var(--muted);font-size:12px}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-  button{background:var(--primary);color:#fff;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
-  button.ghost{background:#233043}
-  button.warn{background:#b45309}
-  button:disabled{opacity:.5;cursor:not-allowed}
-  input,select,textarea{width:100%;background:#0b0f14;color:var(--text);
-    border:1px solid var(--border);border-radius:12px;padding:10px}
-  textarea{min-height:72px;resize:vertical}
-  .grid{display:grid;gap:16px}
-  @media(min-width:900px){.grid{grid-template-columns:340px 1fr}}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
-  .hint{background:#112034;border:1px dashed #2a4365;border-radius:12px;padding:10px 12px;font-size:13px;color:#cfe0ff}
-  .goal-item{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px}
-  .goal-item .title{font-weight:800}
-  .chip{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--chip);color:#cfe0ff;font-size:12px}
-  .sec-title{margin:0 0 10px;font-size:14px;color:#cfe0ff}
-  .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
-  .wd{font-size:12px;color:#9fb3c8;text-align:center}
-  .day{
-    aspect-ratio:1/1; height:42px;
-    display:flex; align-items:center; justify-content:center;
-    border-radius:10px; border:1px solid var(--border); font-size:14px; color:#cfe0ff;
-    background:#0b0f14; cursor:pointer; user-select:none
-  }
-  @supports (aspect-ratio: 1 / 1) { .day{ height:auto; } }
-  .day.off{opacity:.35;cursor:pointer}
-  .day.done{background:#0f2b1d;border-color:#205339;color:#d2ffe8;box-shadow:inset 0 0 0 2px #205339}
-  .day.selected{outline:2px solid #79a7ff}
-  .kpi{display:grid;gap:8px;grid-template-columns:repeat(2,1fr);margin:8px 0}
-  .kpi .cell{background:#0b0f14;border:1px solid var(--border);padding:12px;border-radius:12px}
-  .kpi .cell b{display:block;font-size:18px}
-  .split{display:grid;gap:10px}
-  @media(min-width:560px){.split{grid-template-columns:1fr 1fr}}
-  .right{margin-left:auto;display:flex;gap:8px;align-items:center}
-  .small{font-size:12px}
-  .muted{color:var(--muted)}
-  .fixed-month{display:flex;align-items:center;gap:8px;justify-content:flex-end}
-  .month{min-width:140px;text-align:center;font-weight:700}
-  canvas{max-height:260px}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>GoalPad</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <header>
-  <div class="wrap">
-    <h1>目標管理 <span class="sub">｜言語化／毎日チェック／数値グラフ</span></h1>
-    <div class="toolbar">
-      <button id="addGoalBtn">＋ 目標を追加</button>
-      <button class="ghost" id="exportBtn">エクスポート</button>
-      <label class="ghost" for="importFile" style="padding:10px 14px;border-radius:12px;cursor:pointer">インポート</label>
-      <input id="importFile" type="file" accept="application/json" hidden>
-      <div class="right fixed-month" style="margin-left:auto">
-        <button class="ghost" id="prevMonthBtn">◀︎</button>
-        <div id="monthLabel" class="month"></div>
-        <button class="ghost" id="nextMonthBtn">▶︎</button>
-        <button class="ghost" id="todayBtn">今日</button>
-      </div>
-    </div>
-  </div>
+  <h1>GoalPad</h1>
+  <span id="today"></span>
+  <button id="settingsBtn">⚙</button>
 </header>
 
-<main class="wrap grid">
-  <!-- 左 -->
-  <section>
-    <div class="card hint">
-      ①<strong>目標を追加</strong> → ②<strong>日付をタップ</strong>（選択枠） → ③<strong>この日の実施・数値・メモ</strong>を保存。右上の日付ピッカーで過去日指定もOK。
+<main id="goalList"></main>
+
+<footer>
+  <button id="addGoalBtn">＋目標追加</button>
+  <button id="importBtn">インポート</button>
+  <button id="exportBtn">エクスポート</button>
+  <button id="shareBtn">共有</button>
+  <input type="file" id="importFile" accept=".json" style="display:none" />
+</footer>
+
+<!-- 目標編集モーダル -->
+<div id="goalModal" class="modal hidden">
+  <div class="modal-content">
+    <h2 id="goalModalTitle">目標設定</h2>
+    <label>名称<input id="goalName"></label>
+    <label>単位<input id="goalUnit"></label>
+    <label>方向
+      <select id="goalDirection">
+        <option value="up">増やす</option>
+        <option value="down">減らす</option>
+      </select>
+    </label>
+    <label>開始日<input type="date" id="goalStart"></label>
+    <label>締切日<input type="date" id="goalDue"></label>
+    <label>ベースライン<input type="number" id="goalBaseline"></label>
+    <label>目標値<input type="number" id="goalTarget"></label>
+    <div class="modal-actions">
+      <button id="goalSave">保存</button>
+      <button id="goalCancel">キャンセル</button>
     </div>
+  </div>
+</div>
 
-    <div class="card">
-      <h3 class="sec-title">目標</h3>
-      <div id="goalList"></div>
-    </div>
-
-    <div class="card" id="editorCard">
-      <h3 class="sec-title" id="editorTitle">新しい目標</h3>
-      <div class="split">
-        <div>
-          <label class="small">目標名</label>
-          <input id="gTitle" placeholder="例）毎朝6:00起床 / 体重管理 / YouTube登録者" />
-        </div>
-        <div>
-          <label class="small">カテゴリー</label>
-          <select id="gCategory">
-            <option>習慣</option><option>学習</option><option>健康</option>
-            <option>仕事</option><option>クリエイティブ</option>
-          </select>
-        </div>
-      </div>
-      <div style="margin-top:8px">
-        <label class="small">目標の言語化（ステートメント）</label>
-        <textarea id="gStatement" placeholder="例）将来の自分の土台をつくるため、平日6時に起床して30分の静かな時間を確保する。"></textarea>
-      </div>
-      <div class="split" style="margin-top:8px">
-        <div><label class="small">数値の単位（任意）</label>
-          <input id="gUnit" placeholder="kg, 人, 円, 冊, Step など"></div>
-        <div><label class="small">目標値（任意）</label>
-          <input id="gTarget" type="number" step="any" placeholder="例）65"></div>
-      </div>
-      <div class="split" style="margin-top:12px">
-        <button id="saveGoalBtn">保存</button>
-        <div class="right">
-          <button class="ghost" id="resetEditorBtn">クリア</button>
-          <button class="warn" id="deleteGoalBtn" style="display:none">削除</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 右 -->
-  <section>
-    <div class="card">
-      <div id="activeGoalBox" class="small" style="margin-bottom:8px"></div>
-
-      <div class="kpi">
-        <div class="cell"><span class="muted small">今月の達成率</span><b id="kpiRate">-</b></div>
-        <div class="cell"><span class="muted small">連続ストリーク</span><b id="kpiStreak">-</b></div>
-      </div>
-
-      <!-- カレンダー（日曜はじまり） -->
-      <div class="calendar" id="wdRow"></div>
-      <div id="calendar" class="calendar" style="margin-top:6px"></div>
-
-      <!-- カレンダー直下に実施チェック＆日付ピッカー -->
-      <div class="split" style="margin-top:12px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <input type="checkbox" id="doneCheck">
-          <label for="doneCheck" class="small">この日を「やった」にする</label>
-        </div>
-        <div>
-          <label class="small">記録対象日</label>
-          <input type="date" id="datePicker">
-        </div>
-      </div>
-
-      <div class="split" style="margin-top:8px">
-        <div>
-          <label class="small">この日の数値（任意）</label>
-          <div style="display:flex;gap:8px">
-            <input id="todayValue" type="number" step="any" placeholder="例）67.8 / 3 / 12000">
-            <button id="saveValueBtn">保存</button>
-          </div>
-          <div class="small muted" id="valueHint"></div>
-        </div>
-        <div>
-          <label class="small">この日のメモ（任意）</label>
-          <input id="todayNote" placeholder="例）外食／睡眠不足／動画投稿 など">
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 class="sec-title">数値グラフ</h3>
-      <div id="emptyChart" class="hint" style="display:none">まだ数値がありません。「この日の数値」を保存すると、ここに折れ線グラフが表示されます。</div>
-      <canvas id="chart" height="120"></canvas>
-    </div>
-  </section>
-</main>
-
-<script>
-/* ===== 設定 ===== */
-const WEEK_START = 0; // 日曜=0
-
-const STORAGE_KEY='goals.v2.4';
-let state=load()||{
-  goals:[seed('毎朝6:00起床','習慣','平日6:00起床で30分の静かな時間を確保。','',''),
-         seed('体重管理','健康','体重と食事の関係を毎日観察。','kg',65),
-         seed('YouTube登録者','クリエイティブ','日本×韓国の視点で動画を作る。','人',1000)],
-  activeGoalId:null,
-  monthCursor:today().slice(0,7)
-};
-if(!state.activeGoalId&&state.goals.length)state.activeGoalId=state.goals[0].id;
-save();
-let selectedKey=today();
-
-/* ===== util ===== */
-function seed(t,c,s,u,tar){return{id:crypto.randomUUID(),title:t,category:c,statement:s,unit:u,target:tar===''?'':Number(tar),createdAt:today(),days:{}}}
-function load(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))}catch(e){return null}}
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-const $=s=>document.querySelector(s);
-function today(d=new Date()){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
-function ymStr(d){return d.toISOString().slice(0,7)}
-function fmt(n){return n===''||n==null||isNaN(n)?'-':(''+Number(n)).replace(/(\.\d{0,2}).*$/,'$1')}
-
-/* ===== 日曜に開いたら自動エクスポート（1回/日） ===== */
-(function sundayAutoExport(){
-  const now = new Date();
-  const isSunday = now.getDay() === 0;
-  const lastKey = 'last.auto.export.date';
-  const todayLocal = today();
-  const last = localStorage.getItem(lastKey);
-  if(isSunday && last !== todayLocal){
-    const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `goals-export-${todayLocal}.json`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
-    localStorage.setItem(lastKey, todayLocal);
-    setTimeout(()=>alert('日曜日なので自動でエクスポートしました。保存してください。'),0);
-  }
-})();
-
-/* ===== 目標リスト ===== */
-const goalList=$('#goalList');
-const editor={id:null,title:$('#gTitle'),cat:$('#gCategory'),st:$('#gStatement'),unit:$('#gUnit'),target:$('#gTarget')};
-
-function renderGoals(){
-  goalList.innerHTML='';
-  if(!state.goals.length){
-    goalList.innerHTML='<p class="muted small">目標がありません。「＋ 目標を追加」から作成してください。</p>';
-    return;
-  }
-  state.goals.forEach(g=>{
-    const el=document.createElement('div'); el.className='goal-item';
-    el.innerHTML=`
-      <input type="radio" name="active" ${g.id===state.activeGoalId?'checked':''} style="width:18px;height:18px">
-      <div style="flex:1">
-        <div class="title">${g.title} <span class="chip">${g.category}</span></div>
-        <div class="muted small">${g.statement?g.statement.replace(/\n/g,' '):'（ステートメント未入力）'}</div>
-        <div class="small" style="margin-top:6px">目標値: <b>${fmt(g.target)}</b> ${g.unit||''} <span class="muted">／ 作成: ${g.createdAt}</span></div>
-      </div>
-      <button class="ghost editBtn">編集</button>`;
-    el.querySelector('input').onchange=()=>{state.activeGoalId=g.id;save();refreshRight()}
-    el.querySelector('.editBtn').onclick=()=>editGoal(g.id);
-    goalList.appendChild(el);
-  });
-}
-function editGoal(id){
-  const g=state.goals.find(x=>x.id===id)||seed('','','','','');
-  editor.id=g.id||null; $('#editorTitle').textContent=g.id?'目標を編集':'新しい目標';
-  editor.title.value=g.title||''; editor.cat.value=g.category||'習慣';
-  editor.st.value=g.statement||''; editor.unit.value=g.unit||'';
-  editor.target.value=g.target===''?'':g.target; $('#deleteGoalBtn').style.display=g.id?'inline-block':'none';
-}
-function resetEditor(){editor.id=null;$('#editorTitle').textContent='新しい目標';editor.title.value='';editor.cat.value='習慣';editor.st.value='';editor.unit.value='';editor.target.value='';$('#deleteGoalBtn').style.display='none'}
-$('#addGoalBtn').onclick=()=>{resetEditor();scrollTo({top:0,behavior:'smooth'})}
-$('#resetEditorBtn')?.addEventListener('click', resetEditor);
-$('#saveGoalBtn').onclick=()=>{
-  const t=editor.title.value.trim(); if(!t){alert('目標名を入力してください');return}
-  const p={title:t,category:editor.cat.value,statement:editor.st.value.trim(),unit:editor.unit.value.trim(),target:editor.target.value===''?'':Number(editor.target.value)}
-  if(editor.id){Object.assign(state.goals.find(x=>x.id===editor.id),p)}
-  else{const g=seed(p.title,p.category,p.statement,p.unit,p.target);state.goals.unshift(g);state.activeGoalId=g.id}
-  save();renderGoals();refreshRight();resetEditor();
-}
-
-/* ===== 月移動 ===== */
-$('#prevMonthBtn').onclick=()=>shift(-1);
-$('#nextMonthBtn').onclick=()=>shift(+1);
-$('#todayBtn').onclick=()=>{state.monthCursor=today().slice(0,7); selectedKey=today(); save(); refreshRight()}
-function shift(delta){
-  const [y,m]=state.monthCursor.split('-').map(Number);
-  const d=new Date(y, m-1+delta, 1);
-  state.monthCursor=ymStr(d); save(); refreshRight();
-}
-
-/* ===== カレンダー（日曜はじまり） ===== */
-const cal = $('#calendar');
-const monthLabel = $('#monthLabel');
-const wdRow = $('#wdRow');
-
-function buildWeekHeader(){
-  wdRow.innerHTML='';
-  const names = ['日','月','火','水','木','金','土'];
-  for(let i=0;i<7;i++){
-    const idx=(WEEK_START+i)%7;
-    const s=document.createElement('div');
-    s.className='wd'; s.textContent=names[idx];
-    wdRow.appendChild(s);
-  }
-}
-buildWeekHeader();
-
-function monthGrid(year, month){ // month: 1-12
-  const first = new Date(year, month-1, 1);
-  const offset = (first.getDay() - WEEK_START + 7) % 7;
-  const start = new Date(first);
-  start.setDate(start.getDate() - offset);
-  const cells=[];
-  for(let i=0;i<42;i++){
-    const d=new Date(start); d.setDate(start.getDate()+i);
-    cells.push({ date:d, key: today(d), own: d.getMonth()===first.getMonth() });
-  }
-  return cells;
-}
-
-function refreshRight(){
-  const g = state.goals.find(x=>x.id===state.activeGoalId);
-  if(!g){
-    cal.innerHTML='<p class="muted small">目標を選択してください。</p>';
-    $('#activeGoalBox').innerHTML='';
-    return;
-  }
-
-  $('#activeGoalBox').innerHTML=
-    `<div><b>${g.title}</b> <span class="chip">${g.category}</span></div>
-     <div class="muted small">${g.statement?g.statement.replace(/\n/g,' '):'（ステートメント未入力）'}</div>
-     <div class="small">目標値: <b>${fmt(g.target)}</b> ${g.unit||''}</div>`;
-
-  const [yy,mm] = state.monthCursor.split('-').map(Number);
-  const cells = monthGrid(yy,mm).map(c=>{
-    const rec = g.days[c.key]||{};
-    return {...c, done: !!rec.done};
-  });
-
-  monthLabel.textContent = `${yy}年 ${mm}月`;
-  cal.innerHTML='';
-
-  cells.forEach(c=>{
-    const el=document.createElement('div');
-    el.className='day'+(c.own?'':' off')+(c.done?' done':'')+(c.key===selectedKey?' selected':'');
-    el.title=c.key; el.textContent=c.date.getDate();
-    el.onclick=()=>{
-      if(!c.own){ state.monthCursor=c.key.slice(0,7); }
-      setSelectedDate(c.key);
-    };
-    cal.appendChild(el);
-  });
-
-  // KPI
-  const thisMonth=cells.filter(x=>x.own);
-  const doneCount=thisMonth.filter(x=>x.done).length;
-  $('#kpiRate').textContent=thisMonth.length?Math.round(doneCount/thisMonth.length*100)+'%':'-';
-  $('#kpiStreak').textContent=streak(g);
-
-  // 選択日のフィールド反映
-  $('#datePicker').value = selectedKey;
-  fillFieldsFrom(g, selectedKey);
-
-  // グラフ
-  drawChart(g);
-}
-
-function setSelectedDate(key){
-  selectedKey = key;
-  save(); refreshRight();
-}
-
-/* ===== 日付ピッカー ===== */
-$('#datePicker').addEventListener('change', (e)=>{
-  const val=e.target.value; if(!val) return;
-  const ym=val.slice(0,7);
-  if(ym!==state.monthCursor) state.monthCursor=ym;
-  setSelectedDate(val);
-});
-
-/* ===== 入力欄⇄データ ===== */
-function fillFieldsFrom(g, key){
-  const rec=g.days[key]||{};
-  $('#doneCheck').checked=!!rec.done;
-  $('#todayValue').value = rec.value ?? '';
-  $('#todayNote').value  = rec.note  ?? '';
-  $('#valueHint').textContent = g.target!==''?`目標値：${g.target} ${g.unit||''}`:(g.unit?`単位：${g.unit}`:'');
-}
-$('#doneCheck').addEventListener('change', ()=>{
-  const g=state.goals.find(x=>x.id===state.activeGoalId); if(!g) return;
-  const r=g.days[selectedKey]||{}; r.done = $('#doneCheck').checked;
-  g.days[selectedKey]=r; save(); refreshRight();
-});
-$('#saveValueBtn').onclick=()=>{
-  const g=state.goals.find(x=>x.id===state.activeGoalId); if(!g)return;
-  const r=g.days[selectedKey]||{};
-  const v=$('#todayValue').value; const note=$('#todayNote').value.trim();
-  r.value=v===''?undefined:Number(v); r.note=note||undefined;
-  g.days[selectedKey]=r; save(); refreshRight();
-};
-
-/* ===== 連続ストリーク ===== */
-function streak(g){
-  let s=0; for(let i=0;i<9999;i++){
-    const d=new Date(); d.setDate(d.getDate()-i);
-    const k=today(d); const r=g.days[k];
-    if(r&&r.done){s++}else break;
-  } return s+' 日';
-}
-
-/* ===== グラフ ===== */
-let chart;
-function drawChart(g){
-  const entries=Object.entries(g.days).filter(([k,v])=>v.value!==undefined).sort((a,b)=>a[0].localeCompare(b[0]));
-  const empty=document.getElementById('emptyChart');
-  const canvas=document.getElementById('chart');
-  if(!entries.length){ empty.style.display='block'; canvas.style.display='none'; if(chart){chart.destroy()} return }
-  empty.style.display='none'; canvas.style.display='block';
-  const labels=entries.map(([k])=>k.slice(5));
-  const data=entries.map(([,v])=>v.value);
-  if(chart) chart.destroy();
-  chart=new Chart(canvas,{ type:'line',
-    data:{labels,datasets:[{label:g.title+(g.unit?`（${g.unit}）`:''),data,fill:false,tension:.25,pointRadius:3,pointHoverRadius:5}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#cfe0ff'}},tooltip:{mode:'index',intersect:false}},
-      scales:{x:{ticks:{color:'#9fb3c8'},grid:{color:'#213046'}},
-              y:{ticks:{color:'#9fb3c8'},grid:{color:'#213046'},
-                 beginAtZero:false,suggestedMin:Math.min(...data)*0.95,suggestedMax:Math.max(...data)*1.05}}
-  });
-}
-
-/* ===== エクスポート/インポート ===== */
-$('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`goals-export-${today()}.json`; a.click(); URL.revokeObjectURL(a.href)}
-document.getElementById('importFile').addEventListener('change',e=>{
-  const f=e.target.files[0]; if(!f) return; const r=new FileReader();
-  r.onload=()=>{try{const obj=JSON.parse(r.result); if(!obj.goals) throw new Error('形式が違います');
-    state=obj; selectedKey=today(); save(); renderGoals(); refreshRight(); alert('インポート完了')}catch(err){alert('読み込みエラー: '+err.message)}};
-  r.readAsText(f);
-});
-
-/* ===== 初期描画 ===== */
-renderGoals();
-refreshRight();
-editGoal(state.activeGoalId);
-</script>
+<script src="app.js"></script>
 </body>
 </html>
