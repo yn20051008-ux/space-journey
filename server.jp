@@ -1,0 +1,54 @@
+// 必要なモジュールを読み込む
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+
+// Expressアプリケーションとサーバーを作成する
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+// クライアントにHTMLファイルを返す（簡単なチャット画面）
+app.get('/', (req, res) => {
+  res.send(`
+    <html>
+      <body>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+          var socket = io();
+          socket.on('message', function(msg) {
+            var p = document.createElement('p');
+            p.innerText = msg;
+            document.body.appendChild(p);
+          });
+          function sendMessage() {
+            var input = document.getElementById('msg');
+            socket.emit('message', input.value);
+            input.value = '';
+          }
+        </script>
+        <input id="msg" type="text" />
+        <button onclick="sendMessage()">Send</button>
+      </body>
+    </html>
+  `);
+});
+
+// ソケット接続時の処理
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  
+  socket.on('message', (msg) => {
+    // 受け取ったメッセージを全員に送信
+    io.emit('message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
+});
+
+// ポート3000でサーバーを起動
+server.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000');
+});
