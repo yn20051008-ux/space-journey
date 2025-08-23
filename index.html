@@ -5,27 +5,25 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="format-detection" content="telephone=no" />
-<title>dbSheet×MES｜要件定義の内製化で開発会社いらず。Excelから“本格システム”を現場で作る</title>
-<meta name="description" content="もう開発会社は不要。dbSheet×MESは、Excelそのままの設計で要件定義から開発までを現場で内製化する“革命的ノーコードMES”。導入600社超／平均847万円の開発費削減。まずは10分診断。" />
+<title>dbSheet×MES｜Excelの限界を解決するノーコードMES – 1ヶ月で現場改善</title>
+<meta name="description" content="Excel感覚UI×堅牢DBで現場主導の改善を加速。指示・実績・品質・トレース統合。ROI自動計算付き。" />
 <link rel="canonical" href="https://example.com/dbsheet-mes/" />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 
-<!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="dbSheet×MES" />
-<meta property="og:title" content="要件定義の内製化で開発会社いらず｜dbSheet×MES" />
-<meta property="og:description" content="Excel設計→自動画面化。要件定義も仕様書も不要。現場が今日から作れるノーコードMES。" />
+<meta property="og:title" content="Excelの限界を解決するノーコードMES – 1ヶ月で現場改善" />
+<meta property="og:description" content="Excel感覚UI×堅牢DBで現場主導の改善を加速。指示・実績・品質・トレース統合。ROI自動計算付き。" />
 <meta property="og:url" content="https://example.com/dbsheet-mes/" />
-<meta property="og:image" content="https://placehold.co/1200x630/0A2540/FFFFFF?text=dbSheetxMES" />
+<meta property="og:image" content="https://example.com/ogp/dbsheet-mes-og.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
 
-<!-- Structured Data -->
+<!-- Structured Data (Product + FAQ + Breadcrumb) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -42,10 +40,10 @@
 {
   "@context": "https://schema.org","@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"Excelのまま要件定義できますか？","acceptedAnswer":{"@type":"Answer","text":"はい。Excel帳票がそのまま画面定義になります。関数・条件付き書式なども反映され、仕様書を起こさずに内製化が進みます。"}},
-    {"@type":"Question","name":"本当にベンダー不要ですか？","acceptedAnswer":{"@type":"Answer","text":"基本的な画面・帳票・ワークフローは現場で内製可能です。必要に応じて最小限のサポートを提供します。"}},
-    {"@type":"Question","name":"導入期間は？","acceptedAnswer":{"@type":"Answer","text":"最短2週間で本番稼働。標準は1〜2ヶ月です。まずは1工程から段階導入できます。"}},
-    {"@type":"Question","name":"セキュリティは？","acceptedAnswer":{"@type":"Answer","text":"権限管理・監査ログ・暗号化・バックアップを標準装備。オンプレ/クラウド対応。"}}
+    {"@type":"Question","name":"既存のExcelはそのまま使えますか？","acceptedAnswer":{"@type":"Answer","text":"はい。既存レイアウトを画面化し、計算式・書式も維持。データはDBで一元管理されます。"}},
+    {"@type":"Question","name":"導入にかかる期間は？","acceptedAnswer":{"@type":"Answer","text":"標準1〜2ヶ月。まずは1工程から段階導入が可能です。"}},
+    {"@type":"Question","name":"ITに詳しくなくても使えますか？","acceptedAnswer":{"@type":"Answer","text":"Excel感覚のUIで特別な研修は不要。ノーコードで現場改善を即反映できます。"}},
+    {"@type":"Question","name":"セキュリティは？","acceptedAnswer":{"@type":"Answer","text":"暗号化・権限管理・操作ログ・バックアップに対応。オンプレも選択可能です。"}}
   ]
 }
 </script>
@@ -60,181 +58,162 @@
 </script>
 
 <style>
-/* ===== Design Tokens (Manufacturing-grade) ===== */
+/* ====== Design Tokens ====== */
 :root{
-  --primary:#005BAC;          /* 濃紺：信頼/堅牢 */
-  --accent:#FF6B35;           /* オレンジ：決断/活力 */
-  --success:#00A651;          /* 成長の緑 */
-  --ink:#0A1220;
-  --ink-2:#27364B;
-  --ink-3:#5B6B80;
-  --ink-4:#94A3B8;
-  --bg:#FAFBFC;
-  --surface:#FFFFFF;
-  --alt:#F3F6FA;
-  --border:#E2E8F0;
-  --radius:16px;
-  --shadow-sm:0 2px 8px rgba(0,0,0,.06);
-  --shadow-md:0 8px 24px rgba(0,0,0,.10);
-  --shadow-lg:0 18px 50px rgba(0,0,0,.14);
-  --gradient:linear-gradient(135deg,#005BAC 0%, #0084FF 100%);
-  --focus: #005BAC33;
+  --primary:#1F72B8; --primary-600:#185D99; --accent:#37B7FF;
+  --bg:#E9F2FF; --surface:#FFFFFF; --section-alt:#F3F8FF; --hero-bg:radial-gradient(1200px 420px at 25% 10%, #DCEBFF 0%, #FFFFFF 55%);
+  --ink:#12131A; --ink-2:#374151; --ink-3:#6B7280; --ink-4:#9CA3AF;
+  --light:#F3F4F6; --success:#10B981; --warning:#F59E0B; --danger:#EF4444;
+  --radius:16px; --shadow-sm:0 1px 3px rgba(0,0,0,.06); --shadow-md:0 6px 20px rgba(0,0,0,.10); --shadow-lg:0 16px 40px rgba(0,0,0,.15);
+  --g-primary:linear-gradient(135deg,#1F72B8 0%,#2A8BDF 60%,#37B7FF 100%);
+  --g-dark:linear-gradient(135deg,#111827 0%,#1F2937 100%);
+  --focus:#1F72B822; --border-soft:rgba(31,114,184,.18);
 }
-
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.reveal{transition:none!important}[data-animate]{animation:none!important}}
 body{margin:0;font-family:'Inter','Noto Sans JP',system-ui,-apple-system,Segoe UI,Roboto,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
 .container{max-width:1200px;margin:0 auto;padding:0 20px}
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;height:auto}
-.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:800;border:1px solid transparent;cursor:pointer;transition:.2s}
+/* Header */
+header.header{position:sticky;top:0;z-index:50;backdrop-filter:blur(8px);background:rgba(255,255,255,.92);border-bottom:1px solid rgba(17,24,39,.08)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{font-weight:900;font-size:24px;background:var(--g-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+nav ul{list-style:none;display:flex;gap:28px;margin:0;padding:0}
+.nav-cta{display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:700;border:1px solid transparent;cursor:pointer;transition:.2s}
 .btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.btn-primary{background:var(--gradient);color:#fff;box-shadow:var(--shadow-md)}
+.btn-primary{background:var(--g-primary);color:#fff;box-shadow:var(--shadow-md)}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
 .btn-outline{background:#fff;color:var(--primary);border-color:var(--primary)}
 .btn-outline:hover{background:var(--primary);color:#fff}
-.btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}
-
-/* ===== Header ===== */
-header.header{position:sticky;top:0;z-index:50;backdrop-filter:blur(8px);background:rgba(255,255,255,.92);border-bottom:1px solid var(--border)}
-.header-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
-.logo{font-weight:900;font-size:24px;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-nav ul{list-style:none;display:flex;gap:28px;margin:0;padding:0}
-.nav-cta{display:flex;gap:12px;align-items:center}
+.btn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35)}
 .menu-btn{display:none;border:none;background:transparent;padding:8px}
 
-/* ===== Hero (内製化を主役) ===== */
-.hero{position:relative;padding:120px 0 64px;background:linear-gradient(180deg,#F0F7FF 0%, #FFFFFF 100%);border-bottom:3px solid var(--accent);overflow:hidden}
-.hero .impact-message .shock-label{display:inline-block;background:var(--accent);color:#fff;font-weight:900;padding:6px 10px;border-radius:8px}
-.hero h1{font-size:clamp(28px,4.8vw,56px);line-height:1.15;margin:10px 0 6px;font-weight:900}
-.gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;margin-top:18px}
-
-.three-revolutions{display:flex;gap:14px;align-items:center;margin:18px 0}
-.revolution-card{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-sm);padding:14px 16px;text-align:center;min-width:160px}
-.revolution-card .amount{font-size:28px;font-weight:900}
-.revolution-card .strike{text-decoration:line-through;color:#9CA3AF}
-.revolution-card.highlight{border-color:var(--accent);box-shadow:0 0 0 3px #FF6B3522}
-.revolution-card .save-badge{display:inline-block;margin-top:6px;background:#FFE5DC;color:#B93815;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:900}
-.hero .arrow{font-size:26px;font-weight:900;color:var(--ink-3)}
-
-.reason-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}
-.reason{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px}
-.reason .number{display:inline-flex;width:28px;height:28px;border-radius:50%;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-weight:900;margin-right:8px}
-
-.proof-numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
-.proof{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
-.proof .big{display:block;font-size:30px;font-weight:900;color:var(--primary)}
-.proof .sub{display:block;color:var(--ink-3)}
-
-.hero-media{position:relative}
-.hero-media .screen{border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md)}
-
-/* ===== Sections ===== */
-section{scroll-margin-top:90px;padding:80px 0}
-.section-header{text-align:center;margin-bottom:42px}
-.section-title{font-size:clamp(26px,4vw,40px);font-weight:900;background:linear-gradient(90deg,#0B3B82 0%,#2BA2FF 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* Hero (base – container spacing etc.) */
+.hero{position:relative;padding:128px 0 72px;background:var(--hero-bg);overflow:hidden;box-shadow:inset 0 -1px 0 rgba(17,24,39,.06)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+h1{font-size:clamp(32px,5vw,54px);line-height:1.15;margin:0 0 12px;font-weight:900}
+.section-header{text-align:center;margin-bottom:48px}
+.section-title{font-size:clamp(26px,4vw,40px);font-weight:900;background:linear-gradient(90deg,#0F5DA8 0%,#37B7FF 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .section-sub{color:var(--ink-3)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.box{padding:28px;border-radius:16px;background:#fff;border:1px solid var(--border-soft);box-shadow:var(--shadow-sm)}
+.features{background:var(--section-alt)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.feature{background:#fff;border-radius:16px;padding:24px;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s;border:1px solid var(--border-soft)}
+.feature:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.feature .icon{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,107,53,.12),rgba(0,212,170,.12));margin-bottom:12px;font-size:24px}
 
-/* Cost Revolution */
-.cost-revolution .detailed-cost-table{width:100%;border-collapse:collapse}
-.cost-revolution th,.cost-revolution td{padding:12px;border-bottom:1px solid var(--border);text-align:left}
-.cost-revolution thead th{background:#F6FAFF}
-.cost-revolution .old{color:#B42318;font-weight:800}
-.cost-revolution .new{color:#005BAC;font-weight:800}
-.cost-revolution .save{color:#0B7A47;font-weight:900}
-.cost-revolution .highlight-row{background:#FFF7ED}
-.visual-impact{display:flex;gap:24px;justify-content:center;align-items:flex-end;margin:18px 0}
-.money-stack{display:grid;justify-items:center}
-.money-stack .bills{width:120px;background:linear-gradient(#D4F5DD,#9AE6B4);border:1px solid #86D69E;border-radius:8px}
-.money-stack.old .bills{background:linear-gradient(#FFE1E1,#FFB3B3);border-color:#FF9A9A}
+.results{background:var(--g-dark);color:#fff}
+.kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:28px;text-align:center;transition:transform .2s}
+.kpi:hover{transform:translateY(-6px)}
+.kpi b{font-size:42px;background:var(--g-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:6px}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-top:36px}
 
-/* Unlimited Fit */
-.unlimited-fit .fit-explanation{display:grid;gap:24px}
-.industry-examples{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
-.example-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow-sm)}
-.excel-to-system{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:10px;margin:8px 0}
-.excel-to-system .arrow{text-align:center;font-size:22px;color:var(--ink-3)}
-.example-card ul{margin:0 0 0 18px}
+.cases{background:#fff}
+.case{overflow:hidden;border-radius:18px;background:#fff;box-shadow:var(--shadow-md);transition:transform .2s,box-shadow .2s;border:1px solid var(--border-soft)}
+.case:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.case-img{display:grid;place-items:center;height:180px;background:var(--g-primary);color:#fff;font-size:40px}
+.case-body{padding:22px}
+.badge{display:inline-block;font-size:12px;font-weight:700;color:#374151;background:var(--light);padding:6px 10px;border-radius:999px;margin-bottom:8px}
 
-/* No Vendor Needed */
-.no-vendor-needed .pain-points{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.pain-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px}
-.pain-card .x-mark{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#FFE4E6;color:#B42318;align-items:center;justify-content:center;font-weight:900;margin-right:8px}
-.process-comparison{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
-.timeline{display:flex;flex-wrap:wrap;gap:8px}
-.timeline .step{background:#F1F5F9;border:1px dashed #CBD5E1;padding:6px 10px;border-radius:10px}
-.old-process .cost{color:#B42318;font-weight:900;margin-top:6px}
-.new-process .cost{color:#0B7A47;font-weight:900;margin-top:6px}
-
-/* Offer */
-.irresistible-offer .three-reasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.irresistible-offer .reason{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px}
-.irresistible-offer .badge{background:#111827;color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:900;margin-right:8px}
-.special-offer{margin-top:18px;border:2px solid var(--accent);border-radius:16px;padding:18px;background:#FFF7F3}
-.offer-content{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
-.pricing .original-price{text-decoration:line-through;color:#9CA3AF}
-.pricing .special-price{font-size:28px;font-weight:900;color:#B93815}
-.btn-huge-primary{all:unset;display:inline-flex;align-items:center;justify-content:center;background:var(--gradient);color:#fff;border-radius:999px;padding:14px 26px;font-weight:900;cursor:pointer;box-shadow:var(--shadow-md)}
-.btn-huge-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
-
-/* Technical Proof */
-.technical-proof .step-by-step{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.tech-step{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px}
-.tech-step .number{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;font-weight:900;align-items:center;justify-content:center;margin-right:8px}
-.technical-features .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.tech-feature{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px}
-.tech-feature .icon{font-size:20px}
-
-/* Trust logos */
 .trust-logos .logos{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:center;opacity:.9}
 .trust-logos img{height:30px;filter:grayscale(100%);opacity:.85}
 
-/* CTA */
-.cta{position:relative;text-align:center;padding:96px 0;background:var(--gradient);color:#fff}
-.cta .title{font-size:clamp(30px,4.5vw,46px);font-weight:900;margin:0 0 12px}
-.cta .sub{opacity:.95;margin-bottom:18px;font-size:18px}
-
-/* Pricing / Compare (ダイジェストを残す) */
-.pricing{background:var(--alt)}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-.plan{background:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow-sm);position:relative;border:1px solid var(--border)}
+.compare{background:#f9fafb}
+.pricing{background:var(--section-alt)}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:22px}
+.plan{background:#fff;border-radius:24px;padding:28px;box-shadow:var(--shadow-sm);position:relative;border:1px solid var(--border-soft)}
 .plan.featured{border:2px solid var(--primary);transform:translateY(-4px);box-shadow:var(--shadow-md)}
-.plan .price{font-size:32px;color:var(--primary);font-weight:900;margin:10px 0 12px}
+.plan .price{font-size:34px;color:var(--primary);font-weight:900;margin:10px 0 12px}
 .plan ul{list-style:none;padding:0;margin:10px 0 20px}
 .plan li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #eee}
 
-/* Forms */
-.form-box{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow-sm)}
-input,select,textarea{width:100%;padding:12px;border:1px solid #E5E7EB;border-radius:10px}
-label{font-weight:700}
-.helper{color:var(--ink-3);font-size:13px}
+.cta{position:relative;text-align:center;padding:96px 0;background:var(--g-primary);color:#fff;overflow:hidden}
+.cta .title{font-size:clamp(30px,4.5vw,46px);font-weight:900;margin:0 0 12px}
+.cta .sub{opacity:.9;margin-bottom:20px;font-size:18px}
+.cta .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-white{background:#fff;color:var(--primary)}
 
-/* Floating elements */
+.faq .accordion{max-width:880px;margin:0 auto}
+.faq-item{border:1px solid #eee;border-radius:14px;margin-bottom:12px;overflow:hidden;background:#fff}
+.faq-q{width:100%;text-align:left;background:#fff;padding:18px 22px;font-weight:700;cursor:pointer;border:0;display:flex;justify-content:space-between;align-items:center}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease;padding:0 22px}
+.faq-item[aria-expanded="true"] .faq-a{max-height:360px;padding:0 22px 18px}
+
+.voices{background:#f9fafb}
+.voice{background:#fff;border-radius:16px;padding:22px;box-shadow:var(--shadow-sm);border:1px solid var(--border-soft)}
+
+.steps .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}
+.steps .step{background:#fff;padding:24px;border-radius:16px;border:1px solid var(--border-soft);box-shadow:var(--shadow-sm)}
+.steps .step .n{font-weight:900}
+
+.integrations .logos img{height:30px}
+
+/* Offer banner & counters */
+.offer-banner{position:sticky;top:72px;z-index:60;background:#0b5; color:#fff;padding:10px 14px;display:flex;gap:12px;align-items:center;justify-content:center;font-weight:700}
+.offer-banner .count{background:rgba(255,255,255,.2);padding:4px 10px;border-radius:999px}
+
+/* Float CTA & Chat */
 .float-cta{position:fixed;right:18px;bottom:88px;z-index:40}
-.toast{position:fixed;left:16px;bottom:16px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-md);border-radius:12px;padding:12px 14px;display:none;z-index:42}
+.chat-widget{position:fixed;right:18px;bottom:18px;width:320px;max-width:92vw;border-radius:16px;background:#fff;box-shadow:var(--shadow-lg);border:1px solid var(--border-soft);overflow:hidden;z-index:41;display:none}
+.chat-header{display:flex;align-items:center;justify-content:space-between;background:var(--g-primary);color:#fff;padding:12px 14px}
+.chat-body{padding:14px;display:grid;gap:10px}
+.chat-bubble{background:#f5f7fb;border:1px solid #e5e7eb;border-radius:12px;padding:10px}
 
-/* Responsive */
+/* Notification */
+.toast{position:fixed;left:16px;bottom:16px;background:#fff;border:1px solid var(--border-soft);box-shadow:var(--shadow-md);border-radius:12px;padding:12px 14px;display:none;z-index:42}
+
+/* Responsive tweaks */
 @media (max-width:960px){
   .hero-grid{grid-template-columns:1fr}
-  .reason-grid{grid-template-columns:1fr}
-  .proof-numbers{grid-template-columns:1fr 1fr 1fr}
-  .process-comparison{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
   nav ul{display:none}
   .menu-btn{display:inline-flex}
-  .nav-open nav ul{display:flex;position:absolute;top:72px;left:0;right:0;background:#fff;padding:16px 20px;border-bottom:1px solid var(--border)}
-  .offer-content{grid-template-columns:1fr}
+  .nav-open nav ul{display:flex;position:absolute;top:72px;left:0;right:0;background:#fff;padding:16px 20px;border-bottom:1px solid #eee}
 }
-@media (max-width:480px){ .btn{padding:10px 14px} }
+@media (max-width:480px){
+  .header-inner{height:60px}
+  .container.header-inner{padding:0 12px}
+  .nav-cta{gap:8px}
+  .btn{font-size:clamp(14px,3.7vw,16px);line-height:1.2;padding:10px 14px}
+}
+
+/* === 指示6：追加スタイル === */
+.gradient-text {
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+}
+.phase-card:last-child {
+  animation: pulse-border 2s infinite;
+}
+@media (max-width: 768px) {
+  .three-phase-revolution { grid-template-columns: 1fr !important; }
+  .reason-cards { grid-template-columns: 1fr !important; }
+  .proof-grid { grid-template-columns: 1fr 1fr !important; }
+}
 </style>
 </head>
 <body>
 <a href="#main" class="visually-hidden">本文へスキップ</a>
 
-<!-- ===== Header ===== -->
+<!-- 限定オファーバナー（既存） -->
+<div class="offer-banner" id="offer" data-text="【今月限定】初期費用50%OFF + 3ヶ月無料サポート" data-limit="残り5社様限定" data-deadline-days="9">
+  <span id="offerText">【今月限定】初期費用50%OFF + 3ヶ月無料サポート</span>
+  <span class="count" id="offerLimit">残り5社様限定</span>
+  <span class="count" id="offerCountdown">終了まで 9日</span>
+</div>
+
 <header class="header" role="banner">
   <div class="container header-inner">
     <a class="logo" href="#" aria-label="dbSheet×MES トップ">dbSheet×MES</a>
@@ -243,338 +222,562 @@ label{font-weight:700}
     </button>
     <nav aria-label="主要" id="primary-nav">
       <ul>
-        <li><a href="#cost-revolution">コスト革命</a></li>
-        <li><a href="#unlimited-fit">どんな業務でも</a></li>
-        <li><a href="#no-vendor-needed">開発会社不要</a></li>
-        <li><a href="#technical-proof">技術の裏付け</a></li>
+        <li><a href="#solutions">課題</a></li>
+        <li><a href="#features">機能</a></li>
+        <li><a href="#roi">ROI</a></li>
         <li><a href="#cases">事例</a></li>
+        <li><a href="#schedule">導入スケジュール</a></li>
+        <li><a href="#security">セキュリティ</a></li>
         <li><a href="#pricing">料金</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
     </nav>
     <div class="nav-cta">
-      <a class="btn btn-outline" href="#diagnosis">10分で内製化診断</a>
+      <a class="btn btn-outline" href="#demo">3分でわかる資料</a>
       <a class="btn btn-primary" href="#cta">無料で相談</a>
     </div>
   </div>
 </header>
 
 <main id="main">
-
-  <!-- ===== HERO: 要件定義の内製化 ===== -->
+  <!-- === 指示1：ヒーローセクション全面置換 === -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="container hero-grid">
-      <div>
-        <div class="impact-message">
-          <span class="shock-label">業界初</span>
-          <h1 id="hero-title">もう開発会社は不要です。<br><span class="gradient-text">要件定義から開発まで、全て内製化</span></h1>
-          <p class="lead">dbSheet×MESは、<b>Excelで画面設計</b>→<b>自動でWeb画面生成</b>。現場がそのまま“要件定義兼プロトタイプ”を作り、本番に直結させる<b>革命的ノーコードMES</b>です。</p>
+    <div class="container">
+      <!-- 最重要メッセージ：2つの内製化 -->
+      <div class="dual-impact-banner" style="background:linear-gradient(135deg,#1E40AF,#7C3AED);color:#fff;padding:16px 24px;border-radius:12px;margin-bottom:24px;text-align:center">
+        <h2 style="font-size:20px;margin:0">業界初：要件定義の内製化 × 開発領域の内製化</h2>
+        <p style="margin:4px 0 0;opacity:0.95">製造業DXを最短ルートで実現する dbSheet EX11</p>
+      </div>
+
+      <h1 id="hero-title" style="font-size:clamp(32px,5vw,56px);font-weight:900;line-height:1.2;margin:0 0 16px">
+        もうベンダーは不要。<br>
+        <span class="gradient-text">Excelで要件定義して、そのまま開発完了</span>
+      </h1>
+
+      <!-- 3段階の革命を視覚化 -->
+      <div class="three-phase-revolution" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0">
+        <div class="phase-card" style="background:#fff;border:2px solid #DC2626;border-radius:12px;padding:16px;text-align:center">
+          <div class="phase-label" style="background:#FEE2E2;color:#991B1B;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:bold;margin-bottom:8px">従来</div>
+          <div class="phase-title" style="font-weight:bold;margin-bottom:4px">要件定義</div>
+          <div class="phase-cost" style="font-size:24px;font-weight:900;color:#DC2626">200万円</div>
+          <div class="phase-time" style="color:#6B7280;font-size:14px">2ヶ月</div>
+          <div class="phase-who" style="margin-top:8px;padding:4px;background:#FEF2F2;border-radius:4px;font-size:12px">外注コンサル</div>
         </div>
 
-        <div class="three-revolutions" aria-label="コスト革命の概要">
-          <div class="revolution-card">
-            <div class="before">Before</div>
-            <div class="amount strike">1,000万円</div>
-            <div class="desc">スクラッチ開発費用</div>
-          </div>
-          <div class="arrow">→</div>
-          <div class="revolution-card highlight">
-            <div class="after">After</div>
-            <div class="amount">50万円</div>
-            <div class="desc">dbSheetサポート費のみ</div>
-            <div class="save-badge">95%削減</div>
-          </div>
+        <div class="phase-card" style="background:#fff;border:2px solid #DC2626;border-radius:12px;padding:16px;text-align:center">
+          <div class="phase-label" style="background:#FEE2E2;color:#991B1B;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:bold;margin-bottom:8px">従来</div>
+          <div class="phase-title" style="font-weight:bold;margin-bottom:4px">開発</div>
+          <div class="phase-cost" style="font-size:24px;font-weight:900;color:#DC2626">1,000万円</div>
+          <div class="phase-time" style="color:#6B7280;font-size:14px">6ヶ月</div>
+          <div class="phase-who" style="margin-top:8px;padding:4px;background:#FEF2F2;border-radius:4px;font-size:12px">開発会社</div>
         </div>
 
-        <div class="core-message">
-          <h2>なぜ可能なのか？</h2>
-          <div class="reason-grid">
-            <div class="reason"><span class="number">1</span><b>Excelで画面設計</b><p>いつもの帳票がそのままUI定義。関数/条件付き書式も活用。</p></div>
-            <div class="reason"><span class="number">2</span><b>要件定義も内製</b><p>現場が直接作るから仕様書不要。伝言ゲームゼロ。</p></div>
-            <div class="reason"><span class="number">3</span><b>無限の適応力</b><p>Excelに載る業務は100%システム化。変更は即反映。</p></div>
-          </div>
-        </div>
-
-        <div class="proof-numbers" aria-label="証拠となる数値">
-          <div class="proof"><span class="big">600社</span><span class="sub">が開発会社から解放</span></div>
-          <div class="proof"><span class="big">平均847万円</span><span class="sub">開発費削減/社</span></div>
-          <div class="proof"><span class="big">2週間</span><span class="sub">で本番稼働（通常6ヶ月）</span></div>
-        </div>
-
-        <div class="nav-cta" style="margin-top:16px">
-          <a class="btn btn-primary" href="#diagnosis">10分で“内製化できる度”を診断</a>
-          <a class="btn btn-outline" href="#demo">30秒デモを見る</a>
+        <div class="phase-card" style="background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border:3px solid #16A34A;border-radius:12px;padding:16px;text-align:center;box-shadow:0 0 20px rgba(34,197,94,0.3)">
+          <div class="phase-label" style="background:#16A34A;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:bold;margin-bottom:8px">dbSheet</div>
+          <div class="phase-title" style="font-weight:bold;margin-bottom:4px">要件定義＋開発</div>
+          <div class="phase-cost" style="font-size:28px;font-weight:900;color:#16A34A">50万円</div>
+          <div class="phase-time" style="color:#15803D;font-size:14px;font-weight:bold">2週間</div>
+          <div class="phase-who" style="margin-top:8px;padding:4px;background:#DCFCE7;border-radius:4px;font-size:12px;font-weight:bold">現場で内製</div>
         </div>
       </div>
 
-      <div class="hero-media">
-        <div class="screen">
-          <img src="https://placehold.co/640x420/EEF6FF/6B7280?text=Excel+%E3%81%8B%E3%82%89%E8%87%AA%E5%8B%95%E7%94%BB%E9%9D%A2%E5%8C%96+%28GIF%E6%8E%A8%E5%A5%A8%29" alt="Excel設計→自動Web画面化の流れ" width="640" height="420" loading="lazy">
+      <!-- 削減率の強調 -->
+      <div class="savings-highlight" style="background:#FFF7ED;border:2px solid #EA580C;border-radius:12px;padding:12px;text-align:center;margin:16px 0">
+        <span style="font-size:32px;font-weight:900;color:#EA580C">95%削減</span>
+        <span style="margin-left:16px;font-size:18px">1,200万円 → 50万円</span>
+      </div>
+
+      <!-- なぜ可能なのか？ -->
+      <div class="why-possible" style="margin-top:32px">
+        <h2 style="font-size:24px;font-weight:bold;margin-bottom:16px">なぜこれが可能なのか？</h2>
+        <div class="reason-cards" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+          <div class="reason-card" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px">
+            <div class="reason-header" style="display:flex;align-items:center;margin-bottom:8px">
+              <span style="display:inline-flex;width:32px;height:32px;background:#1E40AF;color:#fff;border-radius:50%;align-items:center;justify-content:center;font-weight:bold;margin-right:12px">1</span>
+              <h3 style="font-weight:bold;margin:0">要件定義の内製化</h3>
+            </div>
+            <p style="margin:0;color:#4B5563">
+              普段使っているExcelがそのまま要件定義書に。<br>
+              <strong>画面イメージ＝Excelシート</strong>なので、<br>
+              「こんなはずじゃなかった」がゼロ。<br>
+              コンサル不要、仕様書作成不要。
+            </p>
+          </div>
+          <div class="reason-card" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px">
+            <div class="reason-header" style="display:flex;align-items:center;margin-bottom:8px">
+              <span style="display:inline-flex;width:32px;height:32px;background:#7C3AED;color:#fff;border-radius:50%;align-items:center;justify-content:center;font-weight:bold;margin-right:12px">2</span>
+              <h3 style="font-weight:bold;margin:0">開発の内製化</h3>
+            </div>
+            <p style="margin:0;color:#4B5563">
+              Excelをドラッグ＆ドロップするだけで<br>
+              <strong>自動でWebシステム化</strong>。<br>
+              プログラミング不要、開発会社不要。<br>
+              修正も現場で即日対応。
+            </p>
+          </div>
         </div>
+      </div>
+
+      <!-- 証拠となる実績 -->
+      <div class="proof-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px">
+        <div class="proof-item" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:28px;font-weight:900;color:#1E40AF">600社</div>
+          <div style="font-size:12px;color:#6B7280">内製化成功</div>
+        </div>
+        <div class="proof-item" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:28px;font-weight:900;color:#1E40AF">847万円</div>
+          <div style="font-size:12px;color:#6B7280">平均削減額/社</div>
+        </div>
+        <div class="proof-item" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:28px;font-weight:900;color:#1E40AF">2週間</div>
+          <div style="font-size:12px;color:#6B7280">最短稼働</div>
+        </div>
+        <div class="proof-item" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:28px;font-weight:900;color:#1E40AF">70%</div>
+          <div style="font-size:12px;color:#6B7280">工数削減</div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="margin-top:24px;display:flex;gap:12px;justify-content:center">
+        <a href="#real-demo" class="btn btn-primary" style="padding:14px 24px;font-size:16px">実際の内製化デモを見る（30秒）</a>
+        <a href="#cost-revolution" class="btn btn-outline" style="padding:14px 24px;font-size:16px">削減額を詳しく計算</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== Trust Logos ===== -->
+  <!-- Trust Logos（既存） -->
   <section class="trust-logos" aria-labelledby="trust-title">
     <div class="container">
       <div class="section-header">
         <h2 id="trust-title" class="section-title">導入企業様（一部）</h2>
-        <p class="section-sub">※ロゴはダミー。実ロゴ/実名に差し替えてください</p>
+        <p class="section-sub">※ロゴはダミー。実ロゴに差し替えてください</p>
       </div>
       <div class="logos">
         <img src="https://placehold.co/120x36?text=TOYOTA+Group" alt="トヨタ系列（例）"/>
-        <img src="https://placehold.co/120x36?text=DENSO" alt="デンソー（例）"/>
-        <img src="https://placehold.co/120x36?text=HITACHI" alt="日立グループ（例）"/>
-        <img src="https://placehold.co/120x36?text=MedTech" alt="医療機器（例）"/>
+        <img src="https://placehold.co/120x36?text=HITACHI+Group" alt="日立グループ（例）"/>
+        <img src="https://placehold.co/120x36?text=MedTech" alt="医療機器大手（例）"/>
+        <img src="https://placehold.co/120x36?text=Food" alt="食品製造（例）"/>
         <img src="https://placehold.co/120x36?text=Construction" alt="建設（例）"/>
       </div>
     </div>
   </section>
 
-  <!-- ===== Cost Revolution ===== -->
-  <section id="cost-revolution" class="cost-revolution" aria-labelledby="cost-title">
+  <!-- === 指示2：内製化の具体的フロー（Trust Logos直後に追加） === -->
+  <section id="internalization-flow" style="padding:80px 0;background:#F9FAFB">
     <div class="container">
       <div class="section-header">
-        <h2 id="cost-title" class="section-title">開発コストの常識を破壊</h2>
-        <p class="section-sub">「要件定義の内製化」で、見積り1,000万円が<b>50万円</b>へ</p>
+        <h2 class="section-title">要件定義も開発も、すべて現場で完結</h2>
+        <p class="section-sub">外注ゼロ・伝言ゲームゼロ・手戻りゼロの革命</p>
       </div>
 
-      <div class="form-box" style="margin-bottom:18px">
-        <h3 style="margin:0 0 8px">補助金チャンス</h3>
-        <p class="helper">IT導入補助金の活用で実質負担を大幅圧縮。申請サポート可。</p>
-        <div>申請締切まで：<b id="subsidy-countdown">--日</b></div>
-      </div>
+      <div style="background:#fff;border:2px solid #E5E7EB;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(0,0,0,0.08)">
+        <h3 style="text-align:center;margin-bottom:24px;font-size:20px">dbSheetによる内製化フロー（全工程2週間）</h3>
 
-      <table class="detailed-cost-table" aria-label="詳細コスト比較">
-        <thead>
-          <tr>
-            <th>項目</th><th class="old">従来の開発会社委託</th><th class="new">dbSheet内製化</th><th class="save">削減額</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="highlight-row"><td>初期開発費</td><td class="old">1,000万円〜3,000万円</td><td class="new">0円（内製）</td><td class="save">▲1,000万円〜</td></tr>
-          <tr><td>要件定義費</td><td class="old">200万円（2ヶ月）</td><td class="new">0円（不要）</td><td class="save">▲200万円</td></tr>
-          <tr><td>仕様変更費</td><td class="old">50万円/回 × 年10回</td><td class="new">0円（自分で即修正）</td><td class="save">▲500万円/年</td></tr>
-          <tr><td>保守費用</td><td class="old">月額20万円</td><td class="new">月額10万円（利用料）</td><td class="save">▲120万円/年</td></tr>
-          <tr class="total-row"><td>5年間総額</td><td class="old">3,200万円</td><td class="new">600万円</td><td class="save">▲2,600万円（81%削減）</td></tr>
-        </tbody>
-      </table>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:relative">
+          <div style="position:absolute;top:40px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,#10B981,#10B981);z-index:1"></div>
 
-      <div class="visual-impact" aria-hidden="true">
-        <div class="money-stack old"><div class="bills" style="height:300px"></div><span>従来：3,200万円</span></div>
-        <div class="money-stack new"><div class="bills" style="height:56px"></div><span>dbSheet：600万円</span></div>
-      </div>
-
-      <blockquote class="form-box" style="font-style:italic">
-        “見積もり3,000万円のシステムを、dbSheetで2週間・50万円で構築。<br>浮いた2,950万円で新規事業に投資できました。”
-        <div style="margin-top:6px">— 製造業A社 情報システム部長</div>
-      </blockquote>
-    </div>
-  </section>
-
-  <!-- ===== Unlimited Fit ===== -->
-  <section id="unlimited-fit" class="unlimited-fit" aria-labelledby="fit-title">
-    <div class="container">
-      <div class="section-header">
-        <h2 id="fit-title" class="section-title">なぜ、どんな業務にもフィットするのか？</h2>
-        <p class="section-sub">原理はシンプル：「<b>Excelで表現できる＝dbSheetで100%システム化</b>」</p>
-      </div>
-
-      <div class="industry-examples">
-        <div class="example-card">
-          <h4>製造：品質管理</h4>
-          <div class="excel-to-system">
-            <div class="excel"><img src="https://placehold.co/360x220?text=%E6%A4%9C%E6%9F%BBExcel"><span>検査記録Excel</span></div>
-            <div class="arrow">→</div>
-            <div class="system"><img src="https://placehold.co/360x220?text=%E5%93%81%E8%B3%AAWeb%E7%B3%BB"><span>リアルタイム品質管理</span></div>
+          <div style="position:relative;z-index:2">
+            <div style="background:#fff;border:2px solid #10B981;border-radius:50%;width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px">📊</div>
+            <div style="text-align:center;margin-top:8px">
+              <div style="font-weight:bold">Day 1-3</div>
+              <div style="font-size:14px;color:#6B7280">現場でExcel作成</div>
+              <div style="font-size:12px;color:#10B981;font-weight:bold">要件定義完了</div>
+            </div>
           </div>
-          <ul class="benefits"><li>バーコードで自動入力</li><li>規格外アラート</li><li>トレーサビリティ完全対応</li></ul>
+
+          <div style="position:relative;z-index:2">
+            <div style="background:#fff;border:2px solid #10B981;border-radius:50%;width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px">🔄</div>
+            <div style="text-align:center;margin-top:8px">
+              <div style="font-weight:bold">Day 4</div>
+              <div style="font-size:14px;color:#6B7280">自動変換</div>
+              <div style="font-size:12px;color:#10B981;font-weight:bold">開発完了</div>
+            </div>
+          </div>
+
+          <div style="position:relative;z-index:2">
+            <div style="background:#fff;border:2px solid #10B981;border-radius:50%;width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px">🧪</div>
+            <div style="text-align:center;margin-top:8px">
+              <div style="font-weight:bold">Day 5-10</div>
+              <div style="font-size:14px;color:#6B7280">現場テスト</div>
+              <div style="font-size:12px;color:#10B981;font-weight:bold">検証完了</div>
+            </div>
+          </div>
+
+          <div style="position:relative;z-index:2">
+            <div style="background:#fff;border:2px solid #10B981;border-radius:50%;width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px">🚀</div>
+            <div style="text-align:center;margin-top:8px">
+              <div style="font-weight:bold">Day 11-14</div>
+              <div style="font-size:14px;color:#6B7280">本番稼働</div>
+              <div style="font-size:12px;color:#10B981;font-weight:bold">運用開始</div>
+            </div>
+          </div>
+
+          <div style="position:relative;z-index:2">
+            <div style="background:#fff;border:2px solid #10B981;border-radius:50%;width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px">♻️</div>
+            <div style="text-align:center;margin-top:8px">
+              <div style="font-weight:bold">随時</div>
+              <div style="font-size:14px;color:#6B7280">現場で改善</div>
+              <div style="font-size:12px;color:#10B981;font-weight:bold">永続的カイゼン</div>
+            </div>
+          </div>
         </div>
 
-        <div class="example-card">
-          <h4>建設：工程管理</h4>
-          <div class="excel-to-system">
-            <div class="excel"><img src="https://placehold.co/360x220?text=%E5%B7%A5%E7%A8%8BExcel"><span>工程表Excel</span></div>
-            <div class="arrow">→</div>
-            <div class="system"><img src="https://placehold.co/360x220?text=%E5%B7%A5%E7%A8%8BWeb"><span>多拠点進捗管理</span></div>
+        <div style="margin-top:32px;padding-top:24px;border-top:1px solid #E5E7EB">
+          <h4 style="margin-bottom:16px">従来の外注開発との決定的な違い</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+            <div style="background:#FEF2F2;border-left:4px solid #DC2626;padding:12px">
+              <h5 style="color:#991B1B;margin:0 0 8px">❌ 従来の外注</h5>
+              <ul style="margin:0;padding-left:20px;font-size:14px">
+                <li>要件定義：コンサルに200万円（2ヶ月）</li>
+                <li>仕様書作成：100ページの文書（1ヶ月）</li>
+                <li>開発：ベンダーに1000万円（6ヶ月）</li>
+                <li>修正：都度50万円×無限ループ</li>
+                <li>結果：「こんなはずじゃなかった」</li>
+              </ul>
+            </div>
+            <div style="background:#F0FDF4;border-left:4px solid #16A34A;padding:12px">
+              <h5 style="color:#14532D;margin:0 0 8px">✅ dbSheet内製化</h5>
+              <ul style="margin:0;padding-left:20px;font-size:14px">
+                <li>要件定義：Excel作成で完了（3日）</li>
+                <li>仕様書：不要（Excelが仕様）</li>
+                <li>開発：自動変換（1日）</li>
+                <li>修正：現場で即対応（0円）</li>
+                <li>結果：「まさにこれが欲しかった」</li>
+              </ul>
+            </div>
           </div>
-          <ul class="benefits"><li>現場からスマホ更新</li><li>遅延自動検知</li><li>協力会社と情報共有</li></ul>
-        </div>
-
-        <div class="example-card">
-          <h4>物流：配送管理</h4>
-          <div class="excel-to-system">
-            <div class="excel"><img src="https://placehold.co/360x220?text=%E9%85%8D%E9%80%81Excel"><span>配送計画Excel</span></div>
-            <div class="arrow">→</div>
-            <div class="system"><img src="https://placehold.co/360x220?text=%E9%85%8D%E9%80%81Web"><span>リアルタイム追跡</span></div>
-          </div>
-          <ul class="benefits"><li>GPS連携で可視化</li><li>最適ルート計算</li><li>荷主へ共有</li></ul>
-        </div>
-      </div>
-
-      <div class="form-box" style="margin-top:16px">
-        <h3 style="margin:0 0 6px">他にもこんな業務で活用</h3>
-        <div style="display:flex;flex-wrap:wrap;gap:8px">
-          <span class="btn-outline" style="padding:6px 10px">在庫/棚卸</span>
-          <span class="btn-outline" style="padding:6px 10px">購買/発注</span>
-          <span class="btn-outline" style="padding:6px 10px">原価/見積</span>
-          <span class="btn-outline" style="padding:6px 10px">工程/設備保全</span>
-          <span class="btn-outline" style="padding:6px 10px">品質/是正処置</span>
-          <span class="btn-outline" style="padding:6px 10px">案件/工事</span>
-          <span class="btn-outline" style="padding:6px 10px">医療/教育/不動産…</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== No Vendor Needed ===== -->
-  <section id="no-vendor-needed" class="no-vendor-needed" aria-labelledby="no-vendor-title">
+  <!-- Problem/Solution（既存） -->
+  <section id="solutions" aria-labelledby="sol-title">
     <div class="container">
       <div class="section-header">
-        <h2 id="no-vendor-title" class="section-title">もう、こんな苦労は不要です</h2>
+        <h2 id="sol-title" class="section-title">その“あるある”、今日で卒業</h2>
+        <p class="section-sub">現場の混乱を、dbSheet×MESがスッキリ解決</p>
       </div>
-
-      <div class="pain-points">
-        <div class="pain-card"><span class="x-mark">×</span><b>要件定義地獄</b><p>「それは仕様にありません」「追加費用が…」を卒業。</p></div>
-        <div class="pain-card"><span class="x-mark">×</span><b>伝言ゲーム</b><p>現場→上司→IT→ベンダー…歪みゼロへ。</p></div>
-        <div class="pain-card"><span class="x-mark">×</span><b>修正の度に見積もり</b><p>「項目追加50万」→ 自分で5分修正。</p></div>
-      </div>
-
-      <div class="process-comparison">
-        <div class="old-process form-box">
-          <h3>従来（6ヶ月〜）</h3>
-          <div class="timeline"><div class="step">要件定義(2ヶ月)</div><div class="step">見積/稟議(1ヶ月)</div><div class="step">開発(3ヶ月)</div><div class="step">テスト(1ヶ月)</div><div class="step">修正(∞)</div></div>
-          <div class="cost">総額：1,000万円〜</div>
+      <div class="grid-2">
+        <div class="box problem">
+          <h3>現場の課題</h3>
+          <ul class="checklist xlist" role="list">
+            <li>Excelが乱立して最新版が不明</li>
+            <li>手入力ミスや二重入力が頻発</li>
+            <li>リアルタイム進捗が見えない</li>
+            <li>トレーサビリティ確保に時間</li>
+            <li>導入したシステムが定着しない</li>
+          </ul>
         </div>
-        <div class="new-process form-box">
-          <h3>dbSheet（2週間）</h3>
-          <div class="timeline"><div class="step">Excel作成(3日)</div><div class="step">自動変換(1日)</div><div class="step">現場テスト(1週間)</div><div class="step">即時修正(随時)</div></div>
-          <div class="cost">費用：月額利用料のみ</div>
+        <div class="box solution">
+          <h3>dbSheet×MESなら</h3>
+          <ul class="checklist" role="list">
+            <li>Excel資産を生かしてDB化</li>
+            <li>バーコードやIoTで自動記録</li>
+            <li>工程全体を一元可視化</li>
+            <li>ワンクリックでトレース出力</li>
+            <li>現場目線のExcelライクUI</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Demo ===== -->
+  <!-- Features（既存） -->
+  <section id="features" class="features" aria-labelledby="feat-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="feat-title" class="section-title">製造現場を変える8つの機能</h2>
+        <p class="section-sub">作業指示から品質・在庫・連携まで、MESの核をワンストップで</p>
+      </div>
+      <div class="features-grid" role="list">
+        <article class="feature" role="listitem"><div class="icon" aria-hidden="true">📋</div><h3>作業指示・実績</h3><p>デジタル指示書で標準化。スキャンで実績を即時反映。</p></article>
+        <article class="feature" role="listitem"><div class="icon">🔍</div><h3>トレーサビリティ</h3><p>ロット・シリアルを完全追跡。影響範囲を一瞬で特定。</p></article>
+        <article class="feature" role="listitem"><div class="icon">✅</div><h3>品質検査管理</h3><p>規格外を自動判定。是正処置までワンストップ管理。</p></article>
+        <article class="feature" role="listitem"><div class="icon">📦</div><h3>在庫・棚卸</h3><p>リアルタイム在庫。RFIDで棚卸時間を大幅短縮。</p></article>
+        <article class="feature" role="listitem"><div class="icon">🔧</div><h3>設備保全</h3><p>点検計画とアラートで予防保全を実現。</p></article>
+        <article class="feature" role="listitem"><div class="icon">📊</div><h3>IoT連携</h3><p>温度・重量・圧力などセンサー連携。異常を自動検知。</p></article>
+        <article class="feature" role="listitem"><div class="icon">🔄</div><h3>外部システム連携</h3><p>ERP/WMS/PLMとAPI・CSVで双方向連携。</p></article>
+        <article class="feature" role="listitem"><div class="icon">⚡</div><h3>ノーコード開発</h3><p>現場で画面や帳票を即カスタマイズ。</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results（既存） -->
+  <section class="results" aria-labelledby="results-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="results-title" class="section-title" style="color:#fff;">圧倒的な導入効果</h2>
+        <p class="section-sub" style="color:#e5e7eb;">600社以上の現場で実証</p>
+      </div>
+      <div class="results-grid" role="list">
+        <div class="kpi" role="listitem"><b>70%</b><span>作業工数削減</span></div>
+        <div class="kpi" role="listitem"><b>95%</b><span>入力ミス削減</span></div>
+        <div class="kpi" role="listitem"><b>80%</b><span>棚卸時間短縮</span></div>
+        <div class="kpi" role="listitem"><b>60%</b><span>不良率改善</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROI（既存） -->
+  <section id="roi" aria-labelledby="roi-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="roi-title" class="section-title">導入効果シミュレーター</h2>
+        <p class="section-sub">あなたの現場では年間いくら削減できる？（概算）</p>
+      </div>
+      <div class="box" style="max-width:860px;margin:0 auto">
+        <form id="roiForm" aria-describedby="roi-help" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div><label for="workHours">現在の月間作業時間（時間）*</label><input id="workHours" type="number" min="0" required style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px"></div>
+          <div><label for="people">作業者数（人）*</label><input id="people" type="number" min="1" required style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px"></div>
+          <div><label for="wage">平均人件費（時給, 円）*</label><input id="wage" type="number" min="0" required style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px"></div>
+          <div><label for="reduction">工数削減率（%）</label><input id="reduction" type="number" min="0" max="100" value="70" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px"></div>
+          <div style="grid-column:1/-1;display:flex;gap:12px;align-items:center">
+            <button class="btn btn-primary" type="submit">計算する</button>
+            <button class="btn btn-outline" type="button" id="roiReset">リセット</button>
+            <span id="roi-help" class="ink-3">※結果は概算。詳細は無料相談で精査します。</span>
+          </div>
+        </form>
+        <div id="roiResult" style="margin-top:14px;font-weight:700"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo（既存） -->
   <section id="demo" aria-labelledby="demo-title">
     <div class="container">
       <div class="section-header">
-        <h2 id="demo-title" class="section-title">30秒でわかる「内製化」デモ</h2>
-        <p class="section-sub">Excelドラッグ → 自動画面化 → バーコードで実績入力</p>
+        <h2 id="demo-title" class="section-title">3分でわかる操作デモ</h2>
+        <p class="section-sub">実画面で「Excel→MES」の変化を確認</p>
       </div>
-      <div class="form-box" style="max-width:880px;margin:0 auto">
-        <video controls poster="https://placehold.co/880x495/EEF6FF/6B7280?text=30%E7%A7%92%E3%83%87%E3%83%A2+%28%E7%94%BB%E9%9D%A2%2B%E6%89%8B%E9%A0%86%29" width="100%">
+      <div class="box" style="max-width:880px;margin:0 auto">
+        <video controls poster="https://placehold.co/880x495/EEF6FF/6B7280?text=3%E5%88%86%E3%83%87%E3%83%A2+%28%E5%8B%95%E7%94%BB%E7%BD%AE%E3%81%8D%E7%BD%AE%E3%81%8D%29" width="100%">
           <source src="demo-placeholder.mp4" type="video/mp4" />
           お使いのブラウザは動画再生に対応していません。
         </video>
         <div style="display:flex;gap:12px;justify-content:center;margin-top:12px">
-          <a class="btn btn-primary" href="#diagnosis">10分診断を受ける</a>
-          <a class="btn btn-outline" href="#cta">無料オンライン相談</a>
+          <a class="btn btn-primary" href="#cta">無料オンラインデモを予約</a>
+          <a class="btn btn-outline" href="#contact">担当に相談する</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Technical Proof ===== -->
-  <section id="technical-proof" class="technical-proof" aria-labelledby="tech-title">
+  <!-- Voices（既存） -->
+  <section id="voices" class="voices" aria-labelledby="voices-title">
     <div class="container">
       <div class="section-header">
-        <h2 id="tech-title" class="section-title">なぜExcelで“本格システム”が作れるのか</h2>
+        <h2 id="voices-title" class="section-title">現場の声</h2>
+        <p class="section-sub">担当者が語る導入効果</p>
       </div>
-
-      <div class="step-by-step">
-        <div class="tech-step"><span class="number">1</span><b>Excel設計</b><img src="https://placehold.co/480x260?text=Excel%E8%A8%AD%E8%A8%88" alt="Excel設計の様子"><p>関数・条件付き書式・データ検証など、いつもの作法がUI定義に。</p></div>
-        <div class="tech-step"><span class="number">2</span><b>自動変換</b><img src="https://placehold.co/480x260?text=%E8%87%AA%E5%8B%95%E5%A4%89%E6%8F%9B" alt="自動変換"><p>dbSheetがWebアプリに変換。DB構造/権限/監査ログも。</p></div>
-        <div class="tech-step"><span class="number">3</span><b>即稼働</b><img src="https://placehold.co/480x260?text=%E5%8D%B3%E7%A8%BC%E5%83%8D" alt="即座に稼働"><p>ブラウザ/スマホ/タブレット対応。現場からすぐ使える。</p></div>
-      </div>
-
-      <div class="technical-features" style="margin-top:18px">
-        <h3>エンタープライズ標準機能</h3>
-        <div class="feature-grid">
-          <div class="tech-feature"><span class="icon">🔒</span><h4>セキュリティ</h4><p>権限管理 / 監査ログ / 暗号化</p></div>
-          <div class="tech-feature"><span class="icon">🗄️</span><h4>データベース</h4><p>正規化 / 参照整合性 / 取引管理</p></div>
-          <div class="tech-feature"><span class="icon">🔄</span><h4>連携</h4><p>API / CSV / IoT / ERPフロント</p></div>
-          <div class="tech-feature"><span class="icon">📱</span><h4>マルチデバイス</h4><p>PC / タブレット / スマホ</p></div>
-        </div>
+      <div class="features-grid">
+        <article class="voice"><blockquote><p>「手書き日報を廃止してスキャン実績に。月間500時間の工数を削減できました。」</p><footer>— 自動車部品メーカー 生産管理部</footer></blockquote></article>
+        <article class="voice"><blockquote><p>「完全トレースで監査準備2週間→3日に短縮。現場の負担が激減しました。」</p><footer>— 医療機器メーカー 品質保証部</footer></blockquote></article>
+        <article class="voice"><blockquote><p>「全社で60システム以上を短期内製。教育コストほぼゼロで横展開できました。」</p><footer>— 建設業 プロジェクト管理室</footer></blockquote></article>
       </div>
     </div>
   </section>
 
-  <!-- ===== Detailed Case (1つ例) ===== -->
+  <!-- Cases（既存） -->
   <section id="cases" class="cases" aria-labelledby="cases-title">
     <div class="container">
       <div class="section-header">
-        <h2 id="cases-title" class="section-title">内製化に成功した企業の実例</h2>
+        <h2 id="cases-title" class="section-title">導入事例</h2>
+        <p class="section-sub">多業種の現場課題を解決</p>
       </div>
-
-      <div class="form-box">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-          <div>
-            <img src="https://placehold.co/560x320?text=Company+Logo+%2B+Factory" alt="A社ロゴ/工場">
-            <h3>自動車部品メーカーA社</h3>
-            <p>従業員：500名 / 年商：200億円</p>
-          </div>
-          <div>
-            <h4>課題</h4>
-            <p>品質管理システム見積3,000万円＋年保守600万円。投資判断が難航。</p>
-            <h4>解決</h4>
-            <p>品質管理課の担当者が、既存Excel帳票をdbSheetへ移行。2週間で主要工程を稼働。</p>
-            <h4>成果</h4>
-            <table style="width:100%;border-collapse:collapse">
-              <tr><td>開発費</td><td>3,000万円 → 0円</td></tr>
-              <tr><td>構築期間</td><td>6ヶ月 → 2週間</td></tr>
-              <tr><td>月額コスト</td><td>50万円 → 10万円</td></tr>
-              <tr><td>品質不良率</td><td>0.5% → 0.1%</td></tr>
-              <tr><td>監査準備</td><td>200時間 → 2時間</td></tr>
-            </table>
-            <blockquote style="margin-top:8px;font-style:italic">“もうシステム会社には頼みません。現場の要望を即日反映できるのが決め手。” — 品質管理課 課長</blockquote>
-          </div>
-        </div>
+      <div class="features-grid">
+        <article class="case" aria-label="自動車部品製造の事例">
+          <div class="case-img" aria-hidden="true">🏭</div>
+          <div class="case-body"><span class="badge">自動車部品</span><h3>作業実績の自動収集で工数70%削減</h3><p>200名規模の工場でスキャン実績収集を導入。手書き日報を廃止し、進捗の見える化を実現。</p><p><strong>成果:</strong> 月間500時間の工数削減</p></div>
+        </article>
+        <article class="case" aria-label="医療機器製造の事例">
+          <div class="case-img">🏥</div>
+          <div class="case-body"><span class="badge">医療機器</span><h3>完全トレースで監査対応を効率化</h3><p>原材料から出荷まで完全トレース体制を構築。査察準備時間を大幅短縮。</p><p><strong>成果:</strong> 2週間 → 3日に短縮</p></div>
+        </article>
+        <article class="case" aria-label="食品製造の事例">
+          <div class="case-img">🍱</div>
+          <div class="case-body"><span class="badge">食品</span><h3>賞味期限管理の自動化で廃棄ロス90%削減</h3><p>FIFOと期限アラートで在庫最適化。廃棄コストを大幅削減。</p><p><strong>成果:</strong> 年間1,000万円削減</p></div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ===== Irresistible Offer ===== -->
-  <section id="irresistible-offer" class="irresistible-offer" aria-labelledby="offer-title">
+  <!-- Steps（既存） -->
+  <section id="schedule" class="steps" aria-labelledby="steps-title">
     <div class="container">
       <div class="section-header">
-        <h2 id="offer-title" class="section-title">今すぐ始めるべき3つの理由</h2>
+        <h2 id="steps-title" class="section-title">最短4週間で本稼働</h2>
+        <p class="section-sub">現場の負担を最小化し、短期間で効果を実感</p>
       </div>
-
-      <div class="three-reasons">
-        <div class="reason"><span class="badge">緊急</span><h3>競合が動き始めている</h3><p>製造業の内製化が加速。後手に回ると人材獲得でも不利。</p></div>
-        <div class="reason"><span class="badge">資金</span><h3>補助金が使える</h3><p>IT導入補助金で最大450万円。申請は支援します。</p></div>
-        <div class="reason"><span class="badge">安心</span><h3>ノーリスク保証</h3><p>30日間全機能トライアル＋効果なければ返金（規約）。</p></div>
-      </div>
-
-      <div class="special-offer">
-        <h3>【期間限定】内製化スタートパック</h3>
-        <div class="offer-content">
-          <div class="included">
-            <h4>含まれるもの</h4>
-            <ul>
-              <li>✅ 既存Excel 10ファイルまでシステム化</li>
-              <li>✅ 2日間の導入研修（オンサイト）</li>
-              <li>✅ 3ヶ月間の無制限サポート</li>
-              <li>✅ 成功事例集＆テンプレート100種</li>
-            </ul>
-          </div>
-          <div class="pricing">
-            <div class="original-price">通常：500万円</div>
-            <div class="special-price">今だけ：50万円</div>
-            <div class="savings">450万円お得（90%OFF）</div>
-          </div>
-        </div>
-        <div class="cta-section" style="margin-top:12px">
-          <a class="btn-huge-primary" href="#diagnosis">無料相談で詳細を確認する</a>
-          <p class="helper">※相談後のしつこい営業は一切ありません</p>
-        </div>
+      <div class="steps-grid">
+        <div class="step"><div class="n">① Week1</div><h3>要件定義・現状分析</h3><p>Excelや帳票を確認し、課題と優先順位を明確化。</p></div>
+        <div class="step"><div class="n">② Week2</div><h3>画面設計・データ移行準備</h3><p>既存ExcelをそのままUI化。計算式・書式を維持。</p></div>
+        <div class="step"><div class="n">③ Week3</div><h3>テスト運用・現場トレーニング</h3><p>1工程から段階導入。即時の効果測定と改善。</p></div>
+        <div class="step"><div class="n">④ Week4</div><h3>本番稼働・フォローアップ</h3><p>工程・拠点へスケール。トレース・品質・在庫を統合。</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Pricing (Digest) ===== -->
+  <!-- Integrations（既存） -->
+  <section id="integrations" class="integrations" aria-labelledby="int-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="int-title" class="section-title">他システム連携・適合性</h2>
+        <p class="section-sub">既存のERPや周辺システムと無理なく共存・拡張</p>
+      </div>
+      <div class="grid-2">
+        <div class="box">
+          <h3>ERP/基幹系と双方向</h3>
+          <ul class="checklist">
+            <li>SAPなどとAPI/CSV連携（受注〜会計の橋渡し）</li>
+            <li>クリーンコアを維持したフロント化</li>
+            <li>台帳・マスタの統一で標準化を促進</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>現場データの自動収集</h3>
+          <ul class="checklist">
+            <li>バーコード/RFID/センサーと連携</li>
+            <li>異常検知とアラート配信</li>
+            <li>CSV/ETLで段階移行も柔軟</li>
+          </ul>
+        </div>
+      </div>
+      <div class="logos" aria-label="連携・採用実績のある技術（ダミー）">
+        <img src="https://placehold.co/120x36?text=ERP" alt="ERP"/>
+        <img src="https://placehold.co/120x36?text=ETL" alt="ETL"/>
+        <img src="https://placehold.co/120x36?text=Barcode" alt="Barcode"/>
+        <img src="https://placehold.co/120x36?text=Sensor" alt="Sensor"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- === 指示3：コスト革命（新設） === -->
+  <section id="cost-revolution" class="cost-revolution">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">開発コストの常識を破壊</h2>
+        <p class="section-sub">「要件定義の内製化 × 開発の内製化」で投資効率を最大化</p>
+      </div>
+
+      <!-- （指示3）table直前の2ブロック -->
+      <div style="background:#FFF7ED;border:2px solid #EA580C;border-radius:12px;padding:20px;margin-bottom:24px">
+        <h3 style="margin:0 0 12px;color:#EA580C">⚠️ 衝撃の事実</h3>
+        <p style="margin:0;font-size:18px;line-height:1.6">
+          一般的な製造業のシステム開発では、<br>
+          <strong>要件定義：200万円 ＋ 開発：1,000万円 ＋ 年間保守：240万円</strong><br>
+          さらに仕様変更の度に<strong>50万円×年10回＝500万円</strong>が追加。<br>
+          <span style="font-size:24px;font-weight:bold;color:#DC2626">5年間で3,200万円が消えていく...</span>
+        </p>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border:2px solid #16A34A;border-radius:12px;padding:20px;margin-bottom:24px">
+        <h3 style="margin:0 0 12px;color:#14532D">✨ dbSheetなら</h3>
+        <p style="margin:0;font-size:18px;line-height:1.6">
+          <strong>要件定義：0円（Excelで完結）＋ 開発：0円（自動変換）</strong><br>
+          必要なのは<strong>サポート費50万円＋月額利用料10万円</strong>のみ。<br>
+          仕様変更も<strong>現場で即対応（0円×∞回）</strong>。<br>
+          <span style="font-size:24px;font-weight:bold;color:#16A34A">5年間で600万円。2,600万円の削減！</span>
+        </p>
+      </div>
+
+      <!-- 詳細なコスト比較表（指示2の表をここに設置） -->
+      <div class="box" style="overflow:auto">
+        <table class="detailed-cost-table" style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="border-bottom:1px solid #e5e7eb">
+              <th style="text-align:left;padding:10px">項目</th>
+              <th class="old" style="text-align:left;padding:10px">従来の開発会社委託</th>
+              <th class="new" style="text-align:left;padding:10px">dbSheet内製化</th>
+              <th class="save" style="text-align:left;padding:10px">削減額</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row"><td style="padding:10px;border-bottom:1px solid #eee">初期開発費</td><td style="padding:10px;border-bottom:1px solid #eee">1,000万円〜3,000万円</td><td style="padding:10px;border-bottom:1px solid #eee">0円（内製）</td><td style="padding:10px;border-bottom:1px solid #eee">▲1,000万円〜</td></tr>
+            <tr><td style="padding:10px;border-bottom:1px solid #eee">要件定義費</td><td style="padding:10px;border-bottom:1px solid #eee">200万円（2ヶ月）</td><td style="padding:10px;border-bottom:1px solid #eee">0円（不要）</td><td style="padding:10px;border-bottom:1px solid #eee">▲200万円</td></tr>
+            <tr><td style="padding:10px;border-bottom:1px solid #eee">仕様変更費</td><td style="padding:10px;border-bottom:1px solid #eee">50万円/回 × 年10回</td><td style="padding:10px;border-bottom:1px solid #eee">0円（自分で即修正）</td><td style="padding:10px;border-bottom:1px solid #eee">▲500万円/年</td></tr>
+            <tr><td style="padding:10px;border-bottom:1px solid #eee">保守費用</td><td style="padding:10px;border-bottom:1px solid #eee">月額20万円</td><td style="padding:10px;border-bottom:1px solid #eee">月額10万円（dbSheet利用料）</td><td style="padding:10px;border-bottom:1px solid #eee">▲120万円/年</td></tr>
+            <tr class="total-row"><td style="padding:10px;border-bottom:1px solid #eee">5年間総額</td><td style="padding:10px;border-bottom:1px solid #eee">3,200万円</td><td style="padding:10px;border-bottom:1px solid #eee">600万円</td><td style="padding:10px;border-bottom:1px solid #eee">▲2,600万円（81%削減）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ビジュアル比較＆実例（補助表示） -->
+      <div class="visual-impact" style="display:flex;gap:20px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+        <div class="money-stack old" style="text-align:center">
+          <div class="bills" style="height:300px;width:120px;background:repeating-linear-gradient(#FCA5A5,#FCA5A5 6px,#F87171 6px,#F87171 12px);border-radius:8px"></div>
+          <span>従来：3,200万円</span>
+        </div>
+        <div class="money-stack new" style="text-align:center">
+          <div class="bills" style="height:56px;width:120px;background:repeating-linear-gradient(#86EFAC,#86EFAC 6px,#22C55E 6px,#22C55E 12px);border-radius:8px"></div>
+          <span>dbSheet：600万円</span>
+        </div>
+      </div>
+
+      <div class="real-case" style="max-width:860px;margin:20px auto 0">
+        <blockquote style="margin:0;padding:16px 20px;border-left:4px solid #1E40AF;background:#F3F8FF">
+          "見積もり3,000万円のシステムを、dbSheetで2週間・50万円で構築。浮いた2,950万円で新規事業に投資できました。"
+          <cite style="display:block;margin-top:8px;color:#374151">- 製造業A社 情報システム部長</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- === 指示4：どんな業務でもフィット（新設＋説明強化） === -->
+  <section id="unlimited-fit" class="unlimited-fit" style="padding:80px 0;background:#FFFFFF">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">なぜ、どんな業務にもフィットするのか？</h2>
+        <p class="section-sub">Excelで表現できる業務は、100% dbSheetでシステム化できる</p>
+      </div>
+
+      <!-- ヘッダー直後 追加ブロック -->
+      <div style="background:#EFF6FF;border:2px solid #2563EB;border-radius:12px;padding:24px;margin-bottom:32px">
+        <h3 style="margin:0 0 16px;text-align:center;color:#1E40AF">dbSheetが解決する根本原理</h3>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center">
+          <div style="text-align:center">
+            <div style="font-size:48px;margin-bottom:8px">📊</div>
+            <h4 style="margin:0 0 8px">現在のExcel業務</h4>
+            <p style="margin:0;font-size:14px;color:#6B7280">
+              作業指示書、品質記録、<br>
+              在庫管理、工程表...<br>
+              すべてExcelで管理
+            </p>
+          </div>
+          <div style="font-size:32px;color:#2563EB">→</div>
+          <div style="text-align:center">
+            <div style="font-size:48px;margin-bottom:8px">🖥️</div>
+            <h4 style="margin:0 0 8px">dbSheetで自動システム化</h4>
+            <p style="margin:0;font-size:14px;color:#6B7280">
+              同じレイアウトのまま<br>
+              Webシステムに変換<br>
+              DB化・権限管理・API連携
+            </p>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid #DBEAFE;text-align:center">
+          <p style="margin:0;font-size:20px;font-weight:bold;color:#1E40AF">
+            「Excelで表現できる業務 ＝ 100% dbSheetでシステム化可能」
+          </p>
+          <p style="margin:8px 0 0;color:#6B7280">
+            この原理により、業種・業務を問わず適用可能。パッケージ製品では対応できない<br>
+            貴社独自の業務フローも、Excelで表現さえできれば完全にシステム化できます。
+          </p>
+        </div>
+      </div>
+
+      <!-- 簡易サンプルグリッド（必要に応じて実画像差し替え） -->
+      <div class="features-grid" role="list">
+        <article class="feature" role="listitem"><h3>製造：品質管理</h3><p>検査記録Excel → リアルタイム品質システム。規格外アラート＆トレース。</p></article>
+        <article class="feature" role="listitem"><h3>建設：工程管理</h3><p>工程表Excel → 多拠点進捗管理。現場スマホ更新＆遅延検知。</p></article>
+        <article class="feature" role="listitem"><h3>物流：配送管理</h3><p>配送計画Excel → 配送追跡。GPS連携＆最適ルート。</p></article>
+        <article class="feature" role="listitem"><h3>小売：在庫補充</h3><p>在庫表Excel → 自動補充提案。閾値アラート＆棚卸90%短縮。</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing（既存） -->
   <section id="pricing" class="pricing" aria-labelledby="pricing-title">
     <div class="container">
       <div class="section-header">
@@ -582,20 +785,20 @@ label{font-weight:700}
         <p class="section-sub">規模と目的で選べる3プラン</p>
       </div>
       <div class="pricing-grid">
-        <div class="plan">
+        <div class="plan" aria-label="スタンダードプラン">
           <h3>スタンダード</h3>
           <div class="price">月額10万円〜</div>
           <ul><li>基本機能すべて</li><li>50ユーザーまで</li><li>CSV連携</li><li>メールサポート</li><li>月次レポート</li></ul>
           <a href="#cta" class="btn btn-outline" style="width:100%">詳細を見る</a>
         </div>
-        <div class="plan featured">
-          <div class="badge" style="position:absolute;left:50%;transform:translateX(-50%);top:-12px;background:var(--gradient);color:#fff;padding:6px 10px;border-radius:999px">おすすめ</div>
+        <div class="plan featured" aria-label="エンタープライズプラン">
+          <div class="badge" style="position:absolute;left:50%;transform:translateX(-50%);top:-12px;background:var(--g-primary);color:#fff;">おすすめ</div>
           <h3>エンタープライズ</h3>
           <div class="price">月額30万円〜</div>
-          <ul><li>全機能</li><li>無制限ユーザー</li><li>API・IoT連携</li><li>24時間サポート</li><li>導入支援・教育</li><li>個別カスタマイズ</li></ul>
+          <ul><li>全機能を利用可</li><li>無制限ユーザー</li><li>API・IoT連携</li><li>24時間サポート</li><li>導入支援・教育</li><li>個別カスタマイズ</li></ul>
           <a href="#cta" class="btn btn-primary" style="width:100%">無料相談する</a>
         </div>
-        <div class="plan">
+        <div class="plan" aria-label="トライアルプラン">
           <h3>トライアル</h3>
           <div class="price">30日間無料</div>
           <ul><li>基本機能すべて</li><li>10ユーザーまで</li><li>導入サポート付き</li><li>本番移行サポート</li></ul>
@@ -605,112 +808,230 @@ label{font-weight:700}
     </div>
   </section>
 
-  <!-- ===== CTA ===== -->
+  <!-- CTA（既存） -->
   <section id="cta" class="cta" aria-labelledby="cta-title">
     <div class="container">
-      <h2 id="cta-title" class="title">開発会社に依存しない。現場が主役の内製化を、今日から。</h2>
+      <h2 id="cta-title" class="title">製造現場の改革は、今日から</h2>
       <p class="sub">まずは無料相談で、課題と効果見込みを<strong>10分で可視化</strong></p>
-      <div class="row" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <a href="#diagnosis" class="btn btn-white">10分で内製化診断</a>
-        <a href="#demo" class="btn btn-ghost">30秒デモを見る</a>
+      <div class="row">
+        <a href="#contact" class="btn btn-white">無料で相談する</a>
+        <a href="#demo" class="btn btn-ghost">資料ダウンロード</a>
       </div>
       <p style="margin-top:10px;opacity:.9">返金保証: 本番稼働後30日以内なら全額返金（規約あり）</p>
     </div>
   </section>
 
-  <!-- ===== 10分で内製化診断（2ステップ） ===== -->
-  <section id="diagnosis" aria-labelledby="diag-title">
+  <!-- === 指示5：最重要CTA（CTA直後に追加） === -->
+  <section id="final-impact" style="padding:80px 0;background:linear-gradient(135deg,#1E293B,#334155)">
     <div class="container">
-      <div class="section-header">
-        <h2 id="diag-title" class="section-title">10分でわかる「内製化できる度」診断</h2>
-        <p class="section-sub">メールだけでスタート。営業電話は一切しません。</p>
-      </div>
+      <div style="text-align:center;color:#fff">
+        <h2 style="font-size:clamp(32px,5vw,48px);font-weight:900;margin:0 0 24px">
+          まだ開発会社に依存しますか？
+        </h2>
 
-      <form id="diagForm" class="form-box" novalidate style="max-width:800px;margin:0 auto">
-        <!-- Step 1 -->
-        <div id="diagStep1">
-          <label for="diagEmail">事例集と診断結果を受け取るメール *</label>
-          <input id="diagEmail" type="email" required placeholder="your.name@example.co.jp" autocomplete="email" inputmode="email" />
-          <div class="helper">送信後すぐにStep2（任意：業務の簡単なヒアリング）へ進みます</div>
-          <div style="display:flex;gap:12px;margin-top:12px">
-            <button type="button" class="btn btn-primary" id="toDiag2">無料で受け取る</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:900px;margin:0 auto 32px">
+          <div style="background:rgba(239,68,68,0.1);border:2px solid #EF4444;border-radius:16px;padding:24px">
+            <h3 style="color:#FCA5A5;margin:0 0 16px">このまま外注を続けると...</h3>
+            <ul style="text-align:left;margin:0;padding-left:20px;color:#FCA5A5;line-height:1.8">
+              <li>要件定義で200万円が消える</li>
+              <li>開発で1,000万円が消える</li>
+              <li>仕様変更の度に50万円が消える</li>
+              <li>現場の要望が歪んで伝わる</li>
+              <li>完成まで6ヶ月待たされる</li>
+              <li>「違う」と言っても手遅れ</li>
+            </ul>
+          </div>
+
+          <div style="background:rgba(34,197,94,0.1);border:2px solid #22C55E;border-radius:16px;padding:24px">
+            <h3 style="color:#86EFAC;margin:0 0 16px">今日dbSheetを選ぶと...</h3>
+            <ul style="text-align:left;margin:0;padding-left:20px;color:#86EFAC;line-height:1.8">
+              <li>要件定義：Excelで0円</li>
+              <li>開発：自動変換で0円</li>
+              <li>仕様変更：現場で即対応0円</li>
+              <li>現場の要望を100%実現</li>
+              <li>2週間で本番稼働</li>
+              <li>永続的にカイゼン可能</li>
+            </ul>
           </div>
         </div>
 
-        <!-- Step 2 -->
-        <div id="diagStep2" hidden>
-          <h3 style="margin:0 0 8px">任意：貴社の状況（所要2分）</h3>
+        <div style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.3);border-radius:16px;padding:32px;max-width:700px;margin:0 auto">
+          <h3 style="margin:0 0 16px;font-size:28px">600社が証明した事実</h3>
+          <p style="font-size:20px;line-height:1.6;margin:0 0 24px">
+            「要件定義の内製化」×「開発の内製化」で<br>
+            <span style="font-size:32px;font-weight:900;color:#FCD34D">平均847万円</span>の開発費を削減
+          </p>
+          <a href="#contact" style="display:inline-block;background:linear-gradient(135deg,#EAB308,#F59E0B);color:#000;padding:16px 48px;border-radius:999px;font-size:20px;font-weight:900;box-shadow:0 8px 32px rgba(245,158,11,0.4);text-decoration:none">
+            今すぐ内製化診断を受ける（無料）
+          </a>
+          <p style="margin:16px 0 0;opacity:0.8;font-size:14px">※ 診断後の営業電話は一切ありません</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two-step Lead Form（既存） -->
+  <section id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="contact-title" class="section-title">お問い合わせ</h2>
+        <p class="section-sub">最短当日中にご連絡します</p>
+      </div>
+
+      <form id="stepForm" novalidate style="max-width:720px;margin:0 auto">
+        <input type="hidden" name="utm_source" id="utm_source">
+        <input type="hidden" name="utm_medium" id="utm_medium">
+        <input type="hidden" name="utm_campaign" id="utm_campaign">
+        <input type="hidden" name="referrer" id="referrer">
+
+        <div class="box" id="step1">
+          <h3 style="margin-top:0">まずは1つだけ教えてください</h3>
+          <label for="situation">現在の状況 *</label>
+          <select id="situation" required style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px;margin-top:6px">
+            <option value="">選択してください</option>
+            <option>現在Excelで管理している</option>
+            <option>他社システムから乗り換えたい</option>
+            <option>新規でシステム導入したい</option>
+          </select>
+          <div style="display:flex;gap:12px;margin-top:14px">
+            <button type="button" class="btn btn-primary" id="toStep2">次へ（残り2問）</button>
+          </div>
+        </div>
+
+        <div class="box" id="step2" hidden>
+          <h3 style="margin-top:0">ご担当者情報</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-            <div><label for="situation">現在の状況</label>
-              <select id="situation">
-                <option value="">選択してください</option>
-                <option>Excelで管理中（ファイル数50未満）</option>
-                <option>Excelで管理中（ファイル数50以上）</option>
-                <option>他社システムから乗り換え検討</option>
-                <option>新規導入検討</option>
-              </select>
-            </div>
-            <div><label for="headcount">対象部門人数</label><input id="headcount" type="number" min="1" placeholder="例：25" /></div>
-            <div style="grid-column:1/-1"><label for="diagMsg">現場の課題（任意）</label><textarea id="diagMsg" rows="5" placeholder="例：Excelが200ファイルあり、最新が分からない。棚卸が年4回の手作業で2日かかる…"></textarea></div>
+            <div><label for="name">お名前 *</label><input id="name" name="name" type="text" required autocomplete="name" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px" /></div>
+            <div><label for="company">会社名 *</label><input id="company" name="company" type="text" required autocomplete="organization" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px" /></div>
+            <div><label for="email">メールアドレス *</label><input id="email" name="email" type="email" required autocomplete="email" inputmode="email" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px" /></div>
+            <div><label for="tel">電話番号</label><input id="tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px" /></div>
+            <div style="grid-column:1/-1"><label for="message">ご相談内容</label><textarea id="message" name="message" rows="5" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px"></textarea></div>
           </div>
-          <div style="display:flex;gap:12px;margin-top:12px">
-            <button class="btn btn-primary" type="submit">診断して結果を受け取る</button>
-            <button class="btn btn-outline" type="button" id="diagBack">戻る</button>
+          <div style="display:flex; gap:12px; align-items:center; margin-top: 16px;">
+            <input type="checkbox" id="agree" required />
+            <label for="agree">個人情報の取り扱いに同意します *</label>
           </div>
+          <div style="display:flex;gap:12px;margin-top:14px">
+            <button class="btn btn-primary" type="submit">送信する</button>
+            <button class="btn btn-outline" type="button" id="backTo1">戻る</button>
+            <a class="btn btn-outline" href="#demo">資料だけ欲しい</a>
+          </div>
+          <p id="lead-errors" class="visually-hidden" aria-live="polite"></p>
         </div>
       </form>
     </div>
   </section>
 
-  <!-- ===== FAQ ===== -->
-  <section id="faq" class="faq" aria-labelledby="faq-title">
+  <!-- Security（既存） -->
+  <section id="security" aria-labelledby="sec-title">
     <div class="container">
       <div class="section-header">
-        <h2 id="faq-title" class="section-title">よくあるご質問</h2>
+        <h2 id="sec-title" class="section-title">エンタープライズグレードのセキュリティ</h2>
+        <p class="section-sub">セキュリティ・コンプライアンス詳細</p>
       </div>
-      <div class="form-box">
-        <details><summary><b>Excelのまま要件定義できますか？</b></summary><p>はい。Excel帳票がUI定義になり、仕様書作成を省略できます。</p></details>
-        <details><summary><b>最短どのくらいで本稼働？</b></summary><p>最短2週間。一般的には1〜2ヶ月で段階導入します。</p></details>
-        <details><summary><b>セキュリティ要件は満たせますか？</b></summary><p>権限管理/監査ログ/暗号化/バックアップ、オンプレ/クラウド対応。</p></details>
-        <details><summary><b>ERPとの連携は？</b></summary><p>API/CSV/IoT連携でERPフロント化が可能。クリーンコア維持。</p></details>
+      <div class="grid-2">
+        <div class="box">
+          <ul class="checklist">
+            <li>暗号化（保存・転送）/ 権限管理 / 操作ログ / 定期バックアップ</li>
+            <li>オンプレミス/クラウド両対応</li>
+            <li>監査ログエクスポート・証跡保全</li>
+          </ul>
+        </div>
+        <div class="box">
+          <ul class="checklist">
+            <li>（例）ISO27001, ISMS 相当の運用体制</li>
+            <li>国内DC複数拠点、DR/BCPオプション</li>
+            <li>個人情報保護法/GDPRへの配慮</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- FAQ（既存） -->
+  <section id="faq" class="faq" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="faq-title" class="section-title">よくあるご質問</h2>
+        <p class="section-sub">導入前の疑問にお答えします</p>
+      </div>
+      <div class="accordion" role="list">
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-q" aria-controls="faq1" aria-expanded="false">既存のExcelはそのまま使えますか？<span aria-hidden>＋</span></button>
+          <div id="faq1" class="faq-a"><p>はい、使えます。既存のレイアウトを画面化し、計算式・書式も維持。データはDBで一元管理されます。</p></div>
+        </div>
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-q" aria-controls="faq2" aria-expanded="false">導入期間はどのくらい？<span aria-hidden>＋</span></button>
+          <div id="faq2" class="faq-a"><p>標準で1〜2ヶ月。まずは1工程から段階導入し、現場負担を最小化できます。</p></div>
+        </div>
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-q" aria-controls="faq3" aria-expanded="false">ITに詳しくなくても使えますか？<span aria-hidden>＋</span></button>
+          <div id="faq3" class="faq-a"><p>Excel感覚のUIで学習コストは最小。ノーコードで改善をすぐ反映できます。</p></div>
+        </div>
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-q" aria-controls="faq4" aria-expanded="false">セキュリティは大丈夫？<span aria-hidden>＋</span></button>
+          <div id="faq4" class="faq-a"><p>暗号化・権限管理・操作ログ・定期バックアップに対応。オンプレミスにも対応します。</p></div>
+        </div>
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-q" aria-controls="faq5" aria-expanded="false">SAP等のERPと連携できますか？<span aria-hidden>＋</span></button>
+          <div id="faq5" class="faq-a"><p>はい、API/CSVで双方向連携が可能です。フロント化によりERP本体の改修を最小化します。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
-<!-- ===== Footer ===== -->
-<footer role="contentinfo" style="background:#0A2540;color:#fff">
-  <div class="container" style="padding:40px 0">
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:28px;margin-bottom:18px">
+<footer role="contentinfo">
+  <div class="container">
+    <div class="grid-2" style="grid-template-columns:2fr 1fr;gap:28px;margin-bottom:24px">
       <div>
-        <div class="logo" aria-hidden="true" style="-webkit-text-fill-color:#fff;background:none">dbSheet×MES</div>
-        <p style="opacity:.9">Excel感覚で、要件定義から開発まで内製化。600社以上の現場で実証。</p>
+        <div class="logo" aria-hidden="true">dbSheet×MES</div>
+        <p>Excel感覚で製造現場のDXを実現。600社以上の導入実績を持つ現場主導型MES。</p>
       </div>
       <div>
         <h4>会社情報</h4>
         <ul style="list-style:none;padding:0;margin:0">
-          <li><a href="#" style="color:#D1E7FF">会社概要</a></li>
-          <li><a href="#" style="color:#D1E7FF">プライバシーポリシー</a></li>
-          <li><a href="#" style="color:#D1E7FF">利用規約</a></li>
-          <li><a href="#" style="color:#D1E7FF">採用情報</a></li>
+          <li><a href="#">会社概要</a></li>
+          <li><a href="#">プライバシーポリシー</a></li>
+          <li><a href="#">利用規約</a></li>
+          <li><a href="#">採用情報</a></li>
         </ul>
       </div>
     </div>
-    <div style="text-align:center;opacity:.8;border-top:1px solid rgba(255,255,255,.15);padding-top:16px">© 2025 dbSheet×MES / NEWCOM Inc. All rights reserved.</div>
+    <div class="foot-bottom" style="text-align:center;opacity:.8;border-top:1px solid rgba(17,24,39,.12);padding-top:20px">© 2025 dbSheet×MES / NEWCOM Inc. All rights reserved.</div>
   </div>
 </footer>
 
-<!-- Floating CTA -->
-<div class="float-cta"><a href="#diagnosis" class="btn btn-primary">📞 10分で内製化診断</a></div>
+<!-- Floating CTA（既存） -->
+<div class="float-cta"><a href="#cta" class="btn btn-primary">📞 今すぐ無料相談</a></div>
 
-<!-- Social Proof Notification -->
-<div class="toast" id="toast">さきほど<span id="lastPref">愛知県</span>の製造業様が無料相談を予約しました</div>
+<!-- Chat Widget（既存） -->
+<div class="chat-widget" id="chat">
+  <div class="chat-header"><strong>ご案内チャット</strong><button aria-label="閉じる" id="chatClose" style="background:transparent;border:none;color:#fff;font-weight:900">×</button></div>
+  <div class="chat-body">
+    <div class="chat-bubble">製造工数を70%削減した事例をご覧になりますか？</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn btn-outline" href="#cases">事例を見る</a>
+      <a class="btn btn-outline" href="#pricing">料金を知りたい</a>
+      <a class="btn btn-primary" href="#demo">デモを予約</a>
+    </div>
+  </div>
+</div>
+
+<!-- Social Proof Notification（既存） -->
+<div class="toast" id="toast">さきほど<span id="lastPref">愛知県</span>の製造業様がデモを申し込みました</div>
 
 <script>
+/* UTM/referrer capture */
+(function(){
+  const p=new URLSearchParams(location.search);
+  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.value=v||'';};
+  set('utm_source',p.get('utm_source')); set('utm_medium',p.get('utm_medium')); set('utm_campaign',p.get('utm_campaign')); set('referrer',document.referrer);
+})();
+
 /* Mobile nav */
 const menuBtn=document.getElementById('menuBtn');
-menuBtn?.addEventListener('click',()=>{const exp=menuBtn.getAttribute('aria-expanded')==='true';menuBtn.setAttribute('aria-expanded',String(!exp));document.body.classList.toggle('nav-open');});
+menuBtn?.addEventListener('click',()=>{const expanded=menuBtn.getAttribute('aria-expanded')==='true';menuBtn.setAttribute('aria-expanded',String(!expanded));document.body.classList.toggle('nav-open');});
 
 /* Smooth scroll + focus */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
@@ -720,35 +1041,84 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
-/* Subsidy countdown (例: 38日残りのダミー。必要に応じて締切日から計算に変更) */
+/* FAQ accordion */
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.closest('.faq-item'); const expanded=item.getAttribute('aria-expanded')==='true';
+    document.querySelectorAll('.faq-item').forEach(o=>{ if(o!==item){o.setAttribute('aria-expanded','false'); o.querySelector('.faq-q').setAttribute('aria-expanded','false');}});
+    item.setAttribute('aria-expanded',String(!expanded)); btn.setAttribute('aria-expanded',String(!expanded));
+  });
+});
+
+/* ROI Calculator */
+const roiForm=document.getElementById('roiForm');
+const roiResult=document.getElementById('roiResult');
+roiForm?.addEventListener('submit',e=>{
+  e.preventDefault();
+  const hours=+document.getElementById('workHours').value||0;
+  const people=+document.getElementById('people').value||0;
+  const wage=+document.getElementById('wage').value||0;
+  const reduction=(+document.getElementById('reduction').value||70)/100;
+  if(hours<=0||people<=0||wage<=0){ roiResult.textContent='必須項目を入力してください。'; return;}
+  const monthlySavedHours=hours*reduction;
+  const monthlySavedYen=monthlySavedHours*wage*people;
+  const yearly=monthlySavedYen*12;
+  roiResult.innerHTML=`<div class="box" style="margin-top:10px">
+    <div>月間削減見込み：<b>${Math.round(monthlySavedYen).toLocaleString()} 円</b></div>
+    <div>年間削減見込み：<b style="font-size:20px">${Math.round(yearly).toLocaleString()} 円</b></div>
+    <div style="opacity:.8">※概算。実数値は要件により変動します。</div>
+  </div>`;
+});
+document.getElementById('roiReset')?.addEventListener('click',()=>{roiForm.reset(); roiResult.textContent='';});
+
+/* Offer banner countdown & limit */
 (function(){
-  const el=document.getElementById('subsidy-countdown'); if(!el) return;
-  let days=38; el.textContent=days+'日';
-  setInterval(()=>{ if(days>0){ days--; el.textContent=days+'日'; } }, 24*60*60*1000);
+  const el=document.getElementById('offer'); if(!el) return;
+  const days=parseInt(el.dataset.deadlineDays||'9',10);
+  const limitEl=document.getElementById('offerLimit'); const countdownEl=document.getElementById('offerCountdown');
+  let left=days;
+  const tick=()=>{ countdownEl.textContent='終了まで '+left+'日'; left=Math.max(0,left-1); };
+  tick(); setInterval(()=>{ if(left>0) tick(); }, 24*60*60*1000);
+  let slots=parseInt((el.dataset.limit||'残り5社様限定').match(/\d+/)?.[0]||'5',10);
+  setInterval(()=>{ if(slots>1){ slots--; limitEl.textContent='残り'+slots+'社様限定'; }}, 45*1000);
 })();
 
-/* Social Proof toast (30秒後1回だけ) */
+/* Social Proof toast */
 (function(){
-  const prefs=['愛知県','静岡県','大阪府','栃木県','福岡県','兵庫県','愛媛県'];
+  const prefs=['愛知県','静岡県','大阪府','栃木県','福岡県'];
   const toast=document.getElementById('toast'); const lastPref=document.getElementById('lastPref');
   setTimeout(()=>{ if(!toast) return; lastPref.textContent=prefs[Math.floor(Math.random()*prefs.length)]; toast.style.display='block'; setTimeout(()=>toast.style.display='none',7000); }, 30000);
 })();
 
-/* 10分診断（2ステップ） */
+/* Chat widget toggle */
 (function(){
-  const step1=document.getElementById('diagStep1');
-  const step2=document.getElementById('diagStep2');
-  document.getElementById('toDiag2')?.addEventListener('click',()=>{
-    const email=document.getElementById('diagEmail');
-    const ok=/^[^@\s]+@[^@\s]+\.[\w\-]+$/.test(email.value);
-    if(!ok){ alert('有効なメールアドレスを入力してください'); return; }
+  const chat=document.getElementById('chat');
+  const opener=document.createElement('button');
+  opener.className='btn btn-primary'; opener.style.position='fixed'; opener.style.right='18px'; opener.style.bottom='18px'; opener.style.zIndex='39';
+  opener.textContent='💬 チャットで質問';
+  opener.addEventListener('click',()=>{ chat.style.display='block'; opener.style.display='none'; });
+  document.body.appendChild(opener);
+  document.getElementById('chatClose')?.addEventListener('click',()=>{ chat.style.display='none'; opener.style.display='inline-flex'; });
+})();
+
+/* Two-step form logic + validation */
+(function(){
+  const step1=document.getElementById('step1'); const step2=document.getElementById('step2');
+  document.getElementById('toStep2')?.addEventListener('click',()=>{
+    const sel=document.getElementById('situation');
+    if(!sel.value){ alert('状況を選択してください'); return; }
     step1.hidden=true; step2.hidden=false; step2.scrollIntoView({behavior:'smooth'});
   });
-  document.getElementById('diagBack')?.addEventListener('click',()=>{ step2.hidden=true; step1.hidden=false; step1.scrollIntoView({behavior:'smooth'}); });
-
-  document.getElementById('diagForm')?.addEventListener('submit',(e)=>{
-    e.preventDefault();
-    alert('診断ありがとうございます。結果と事例集をメールでお送りします。');
+  document.getElementById('backTo1')?.addEventListener('click',()=>{ step2.hidden=true; step1.hidden=false; step1.scrollIntoView({behavior:'smooth'}); });
+  document.getElementById('stepForm')?.addEventListener('submit',(e)=>{
+    const errors=[];
+    const name=document.getElementById('name'); const company=document.getElementById('company'); const email=document.getElementById('email'); const agree=document.getElementById('agree');
+    if(!name.value.trim()) errors.push('お名前は必須です');
+    if(!company.value.trim()) errors.push('会社名は必須です');
+    if(!/^[^@\s]+@[^@\s]+\.[\w\-]+$/.test(email.value)) errors.push('有効なメールアドレスを入力してください');
+    if(!agree.checked) errors.push('個人情報の取り扱いに同意してください');
+    if(errors.length){ e.preventDefault(); const box=document.getElementById('lead-errors'); box.classList.remove('visually-hidden'); box.textContent=errors.join('、'); alert('入力内容をご確認ください:\n' + errors.join('\n')); }
+    else { e.preventDefault(); alert('お問い合わせありがとうございます。担当よりご連絡します。'); }
   });
 })();
 </script>
