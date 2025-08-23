@@ -1,52 +1,151 @@
-<!-- index.html -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>GoalPad</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大阪展示会向け：dbSheet 内製化プレゼン</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 1s ease, transform 1s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .count-up { font-weight: bold; font-size: 2rem; }
+  </style>
 </head>
-<body>
-<header>
-  <h1>GoalPad</h1>
-  <span id="today"></span>
-  <button id="settingsBtn">⚙</button>
-</header>
+<body class="bg-gray-50 text-gray-800">
+  <header class="text-center py-10 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+    <h1 class="text-4xl font-extrabold mb-2">要件定義領域の内製化 × 開発領域の内製化</h1>
+    <p class="text-lg">製造業DXを最短ルートで実現する dbSheet EX11</p>
+  </header>
 
-<main id="goalList"></main>
+  <main class="max-w-6xl mx-auto p-6 space-y-16">
+    <section class="fade-in">
+      <h2 class="text-2xl font-bold mb-4">製造業が抱える現場課題</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Excelや紙での作業指示・実績管理 → 二重入力・転記ミス・更新漏れ</li>
+        <li>システム導入後も残る「Excel管理」 → 分析困難・属人化</li>
+        <li>外注開発に依存 → コスト増加、修正に数ヶ月かかる</li>
+        <li>品質トレーサビリティや不良分析が分断 → 顧客からの即応ができない</li>
+      </ul>
+    </section>
 
-<footer>
-  <button id="addGoalBtn">＋目標追加</button>
-  <button id="importBtn">インポート</button>
-  <button id="exportBtn">エクスポート</button>
-  <button id="shareBtn">共有</button>
-  <input type="file" id="importFile" accept=".json" style="display:none" />
-</footer>
+    <section class="fade-in">
+      <h2 class="text-2xl font-bold mb-4">要件定義の内製化</h2>
+      <p>
+        dbSheetは、普段使っている<strong>Excelシートをそのまま利用して要件定義</strong>を進められるのが最大の特徴です。<br>
+        コードを書き始める前に、画面イメージや入力項目をExcelで定義することで、現場が主体となって仕様を固められます。<br>
+        これにより「要件が開発に正しく伝わらない」「完成してからイメージと違う」といった従来の外注開発の課題を解消し、<strong>現場とシステムの齟齬をゼロにできます</strong>。
+      </p>
+    </section>
 
-<!-- 目標編集モーダル -->
-<div id="goalModal" class="modal hidden">
-  <div class="modal-content">
-    <h2 id="goalModalTitle">目標設定</h2>
-    <label>名称<input id="goalName"></label>
-    <label>単位<input id="goalUnit"></label>
-    <label>方向
-      <select id="goalDirection">
-        <option value="up">増やす</option>
-        <option value="down">減らす</option>
-      </select>
-    </label>
-    <label>開始日<input type="date" id="goalStart"></label>
-    <label>締切日<input type="date" id="goalDue"></label>
-    <label>ベースライン<input type="number" id="goalBaseline"></label>
-    <label>目標値<input type="number" id="goalTarget"></label>
-    <div class="modal-actions">
-      <button id="goalSave">保存</button>
-      <button id="goalCancel">キャンセル</button>
-    </div>
-  </div>
-</div>
+    <section class="fade-in">
+      <h2 class="text-2xl font-bold mb-4">開発・運用の内製化</h2>
+      <p>
+        開発段階では、Excelで定義した内容をそのままシステム化できるため、短期間でのリリースが可能です。<br>
+        さらに<strong>運用開始後の仕様変更や改善も現場で直接対応可能</strong>。外注ベンダーに依頼する必要がなく、「すぐに改善したい」という現場の声をその日のうちに反映できます。<br>
+        これにより、製造現場の<strong>継続的なカイゼン活動とDX推進</strong>を強力に支援します。
+      </p>
+    </section>
 
-<script src="app.js"></script>
+    <section class="fade-in">
+      <h2 class="text-2xl font-bold mb-4">dbSheetが解決すること</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li><strong>Excel資産を活かしたMES連携：</strong>既存のExcelをそのままシステム化、現場の違和感ゼロ</li>
+        <li><strong>リアルタイム実績収集：</strong>紙やExcelの遅延をなくし、現場データを即座に集計</li>
+        <li><strong>トレーサビリティの一元化：</strong>品質データ・工程データを一画面で確認可能</li>
+        <li><strong>要件定義・開発・運用の内製化：</strong>外注不要で現場主導のカイゼンを継続</li>
+        <li><strong>即効性：</strong>最短1か月で運用開始、ROIを早期に実感</li>
+      </ul>
+    </section>
+
+    <section class="fade-in">
+      <h2 class="text-2xl font-bold mb-4">他社ツールとの違い</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li><strong>ローコード／ノーコード製品</strong>では残る複雑なExcel業務もシステム化可能</li>
+        <li><strong>RPA</strong>のような単純自動化ではなく、業務全体をデータベース化</li>
+        <li><strong>スクラッチ開発</strong>と比較して、開発期間を数分の1・費用を大幅削減</li>
+      </ul>
+    </section>
+
+    <section class="fade-in">
+      <h2 class="text-2xl font-bold mb-4">開発費の削減効果</h2>
+      <p>
+        dbSheetなら、要件定義から開発・運用まで内製化できるため、外注コストを数百万円単位で削減可能。<br>
+        さらに、改善サイクルを現場で回せるため、<strong>継続的に追加費用を抑制</strong>しながら現場最適化を続けられます。
+      </p>
+    </section>
+
+    <section class="fade-in">
+      <h2 class="text-2xl font-bold mb-4">dbSheetの導入メリット</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li><strong>要件定義の内製化：</strong>Excelで仕様を固め、現場とシステムの齟齬を解消</li>
+        <li><strong>開発・運用の内製化：</strong>現場で改善を継続でき、変化に即応</li>
+        <li><strong>スピード：</strong>最短1か月で稼働開始</li>
+        <li><strong>コスト削減：</strong>開発費を平均50%以上削減</li>
+        <li><strong>品質向上：</strong>トレーサビリティ一元化で不良率改善</li>
+        <li><strong>安心実績：</strong>製造業を中心に500社以上導入</li>
+      </ul>
+    </section>
+
+    <section class="fade-in grid grid-cols-2 gap-8">
+      <div class="bg-white p-6 shadow rounded-xl">
+        <h3 class="text-xl font-semibold mb-2">導入実績</h3>
+        <p class="count-up" id="count">0</p>
+        <p>500社以上の製造業で導入実績</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-xl">
+        <h3 class="text-xl font-semibold mb-2">MES連携事例</h3>
+        <p>作業指示、実績収集、品質管理、トレーサビリティを統合し、<br><strong>工数70%削減 × 品質向上</strong>を実現。</p>
+      </div>
+    </section>
+
+    <section class="fade-in text-center py-10 bg-indigo-50 rounded-2xl shadow-md">
+      <h2 class="text-2xl font-bold mb-4">まとめ：なぜ今日dbSheetを導入すべきか</h2>
+      <ul class="list-disc text-left max-w-2xl mx-auto space-y-2">
+        <li>要件定義から運用まで<strong>すべて内製化</strong>できる唯一のプラットフォーム</li>
+        <li>Excelを使って仕様を固め、現場主導でシステム化</li>
+        <li>運用後もその日のうちにカイゼンを反映できる俊敏性</li>
+        <li>外注不要で開発費用・期間を劇的に削減</li>
+        <li>製造業の現場課題を直接解決するMES連携・品質管理機能</li>
+        <li><strong>「今日から改善を始められる唯一の選択肢」</strong></li>
+      </ul>
+      <div class="mt-6">
+        <a href="#" class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">▶ 今すぐ資料請求する</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-6 bg-gray-200 mt-10">
+    <p>© 2025 NEWCOM - dbSheet EX11</p>
+  </footer>
+
+  <script>
+    // フェードインアニメーション
+    const faders = document.querySelectorAll('.fade-in');
+    const options = { threshold: 0.2 };
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, options);
+
+    faders.forEach(fader => observer.observe(fader));
+
+    // 数値カウントアップ
+    function countUp(el, target) {
+      let count = 0;
+      const interval = setInterval(() => {
+        count++;
+        el.textContent = count;
+        if (count >= target) clearInterval(interval);
+      }, 10);
+    }
+
+    window.addEventListener('load', () => {
+      countUp(document.getElementById('count'), 500);
+    });
+  </script>
 </body>
 </html>
